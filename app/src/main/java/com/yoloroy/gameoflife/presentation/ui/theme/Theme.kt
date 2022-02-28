@@ -1,8 +1,7 @@
-package com.yoloroy.gameoflife.ui.theme
+package com.yoloroy.gameoflife.presentation.ui.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val ColorPalette = darkColors(

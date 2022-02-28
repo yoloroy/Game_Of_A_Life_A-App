@@ -1,4 +1,4 @@
-package com.yoloroy.gameoflife.ui.theme
+package com.yoloroy.gameoflife.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

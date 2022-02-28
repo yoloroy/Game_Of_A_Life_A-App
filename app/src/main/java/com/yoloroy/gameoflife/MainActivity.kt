@@ -8,7 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.yoloroy.gameoflife.ui.theme.GameOfLifeTheme
+import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

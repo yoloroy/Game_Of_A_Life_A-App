@@ -1,4 +1,4 @@
-package com.yoloroy.gameoflife.view.registration
+package com.yoloroy.gameoflife.presentation.registration
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.yoloroy.gameoflife.ui.theme.GameOfLifeTheme
+import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 @Composable
 fun RegistrationScreen(callback: RegistrationCallback, moveToLogin: () -> Unit) {
