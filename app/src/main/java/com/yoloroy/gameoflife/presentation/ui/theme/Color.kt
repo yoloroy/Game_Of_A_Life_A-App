@@ -3,7 +3,10 @@ package com.yoloroy.gameoflife.presentation.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val YellowAccent = Color(0xFFFFF000)
-val WhiteText = Color(0xFFDDDDDD)
-val BlueDark = Color(0xFF0E2433)
-val BlueMedium = Color(0xFF1C4966)
-val BlueLight = Color(0xFF45B6FE)
+val WhiteText = Color(0xFFF8F8F8)
+val GrayNotSelected = Color(0xFF7E888F)
+val RedError = Color(0xFFE93B3B)
+val BlueBackground = Color(0xFF0E2433)
+val BlueSurface = Color(0xFF1C4966)
+val BlueSecondaryVariant = Color(0xFF2F7CAD)
+val BlueSecondary = Color(0xFF45B6FE)
