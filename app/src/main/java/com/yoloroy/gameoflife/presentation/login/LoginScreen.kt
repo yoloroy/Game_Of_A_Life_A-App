@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Login
-import androidx.compose.material.icons.rounded.Visibility
-import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.material.icons.sharp.Login
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,10 +16,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.yoloroy.gameoflife.presentation.components.TextFieldWithErrorText
+import com.yoloroy.gameoflife.presentation.components.TrailingIcon
+import com.yoloroy.gameoflife.presentation.ui.icons.VisibilityToggle
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 @Composable
-fun LoginScreen(callback: LoginCallback, moveToRegister: () -> Unit) {
+fun LoginScreen(login: (emailOrLogin: String, password: String) -> Unit, moveToRegister: () -> Unit) {
     var emailOrLogin by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -64,40 +65,33 @@ fun LoginScreen(callback: LoginCallback, moveToRegister: () -> Unit) {
                         color = MaterialTheme.colors.secondary
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 // email or login
-                OutlinedTextField(
+                TextFieldWithErrorText( // TODO error
                     value = emailOrLogin,
                     onValueChange = { emailOrLogin = it },
-                    label = { Text("Email or Login") },
+                    label = "Email or Login",
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // password
-                OutlinedTextField(
+                TextFieldWithErrorText( // TODO error
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Password") },
-                    trailingIcon = {
-                        val image = if (isPasswordVisible)
-                            Icons.Rounded.Visibility
-                        else
-                            Icons.Rounded.VisibilityOff
-
-                        IconButton(onClick = {
-                            isPasswordVisible = !isPasswordVisible
-                        }) {
-                            Icon(imageVector = image, "")
-                        }
-                    },
+                    label = "Password",
+                    trailingIcon = TrailingIcon(
+                        image = Icons.Sharp.VisibilityToggle[isPasswordVisible],
+                        contentDescription = "Toggle password visibility",
+                        onClick = { isPasswordVisible = !isPasswordVisible }
+                    ),
                     visualTransformation =
                         if (isPasswordVisible) VisualTransformation.None
-                        else PasswordVisualTransformation(),
+                        else PasswordVisualTransformation('•'),
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // to sign up
                 ClickableText(
@@ -122,10 +116,10 @@ fun LoginScreen(callback: LoginCallback, moveToRegister: () -> Unit) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { callback.login(emailOrLogin, password) }
+                onClick = { login(emailOrLogin, password) }
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Login,
+                    imageVector = Icons.Sharp.Login,
                     tint = MaterialTheme.colors.background,
                     contentDescription = "Sign in"
                 )
