@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.PersonAddAlt
-import androidx.compose.material.icons.rounded.Visibility
-import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.material.icons.sharp.PersonAddAlt
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,10 +16,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.yoloroy.gameoflife.presentation.components.TextFieldWithErrorText
+import com.yoloroy.gameoflife.presentation.components.TrailingIcon
+import com.yoloroy.gameoflife.presentation.ui.icons.VisibilityToggle
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 @Composable
-fun RegistrationScreen(callback: RegistrationCallback, moveToLogin: () -> Unit) {
+fun RegistrationScreen(onRegister: (email: String, login: String, password: String) -> Unit, moveToLogin: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var login by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -65,48 +66,42 @@ fun RegistrationScreen(callback: RegistrationCallback, moveToLogin: () -> Unit) 
                         color = MaterialTheme.colors.secondary
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 // email
-                OutlinedTextField(
+                TextFieldWithErrorText(
                     value = email,
                     onValueChange = { email = it },
-                    label = { Text("Email") },
+                    label = "Email",
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // login
-                OutlinedTextField(
+                TextFieldWithErrorText(
                     value = login,
                     onValueChange = { login = it },
-                    label = { Text("Login") },
+                    label = "Login",
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // password
-                OutlinedTextField(
+                TextFieldWithErrorText(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text("Password") },
-                    trailingIcon = {
-                        val image = if (isPasswordVisible)
-                            Icons.Rounded.Visibility
-                        else Icons.Rounded.VisibilityOff
-
-                        IconButton(onClick = {
-                            isPasswordVisible = !isPasswordVisible
-                        }) {
-                            Icon(imageVector  = image, "")
-                        }
-                    },
+                    label = "Password",
+                    trailingIcon = TrailingIcon(
+                        image = Icons.Sharp.VisibilityToggle[isPasswordVisible],
+                        contentDescription = "Toggle password visibility",
+                        onClick = { isPasswordVisible = !isPasswordVisible }
+                    ),
                     visualTransformation =
                         if (isPasswordVisible) VisualTransformation.None
-                        else PasswordVisualTransformation(),
+                        else PasswordVisualTransformation('•'),
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // to sign in
                 ClickableText(
@@ -131,10 +126,10 @@ fun RegistrationScreen(callback: RegistrationCallback, moveToLogin: () -> Unit) 
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { callback.register(email, login, password) }
+                onClick = { onRegister(email, login, password) }
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.PersonAddAlt,
+                    imageVector = Icons.Sharp.PersonAddAlt,
                     tint = MaterialTheme.colors.background,
                     contentDescription = "Register"
                 )
