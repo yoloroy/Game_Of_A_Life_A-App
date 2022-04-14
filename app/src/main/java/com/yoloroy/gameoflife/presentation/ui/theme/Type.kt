@@ -20,5 +20,7 @@ val Typography = Typography(
     defaultFontFamily = playFonts,
     h1 = TextStyle(fontFamily = pressStartFonts, fontSize = 96.sp, letterSpacing = (-1.5).sp),
     h2 = TextStyle(fontFamily = pressStartFonts, fontSize = 60.sp, letterSpacing = (-0.5).sp),
-    h3 = TextStyle(fontFamily = pressStartFonts, fontSize = 48.sp, letterSpacing = 0.sp)
+    h3 = TextStyle(fontFamily = pressStartFonts, fontSize = 48.sp, letterSpacing = 0.sp),
+    subtitle1 = TextStyle(fontFamily = playFonts, fontSize = 24.sp, letterSpacing = 1.sp),
+    subtitle2 = TextStyle(fontFamily = playFonts, fontSize = 20.sp, letterSpacing = 1.5.sp)
 )

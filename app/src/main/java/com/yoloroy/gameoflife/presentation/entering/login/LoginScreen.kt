@@ -1,4 +1,4 @@
-package com.yoloroy.gameoflife.presentation.login
+package com.yoloroy.gameoflife.presentation.entering.login
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText

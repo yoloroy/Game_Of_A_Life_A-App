@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 
 private val ColorPalette = darkColors(
     primary = YellowAccent,
+    primaryVariant = YellowAccent,
     secondary = BlueSecondary,
     secondaryVariant = BlueSecondaryVariant,
     background = BlueBackground,
@@ -19,6 +20,7 @@ private val ColorPalette = darkColors(
     onError = BlueBackground
 )
 
+val Colors.text get() = WhiteText
 val Colors.warning get() = OrangeWarning
 val Colors.notSelected get() = GrayNotSelected
 
