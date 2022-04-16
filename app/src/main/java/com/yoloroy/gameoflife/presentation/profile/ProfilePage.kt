@@ -1,11 +1,9 @@
 package com.yoloroy.gameoflife.presentation.profile
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.AccountCircle
@@ -26,8 +24,6 @@ import com.yoloroy.gameoflife.domain.model.Skill
 import com.yoloroy.gameoflife.presentation.ui.icons.ExpandToggle
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 import com.yoloroy.gameoflife.presentation.ui.theme.text
-
-var preview = false
 
 @Composable
 fun ProfileScreen(profile: Profile, onClickSettings: () -> Unit) {
