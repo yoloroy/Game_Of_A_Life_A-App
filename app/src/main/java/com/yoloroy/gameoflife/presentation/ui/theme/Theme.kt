@@ -22,7 +22,7 @@ private val ColorPalette = darkColors(
 
 val Colors.text get() = WhiteText
 val Colors.warning get() = OrangeWarning
-val Colors.notSelected get() = GrayNotSelected
+val Colors.disabled get() = GrayNotSelected
 
 @Composable
 fun GameOfLifeTheme(content: @Composable () -> Unit) {
