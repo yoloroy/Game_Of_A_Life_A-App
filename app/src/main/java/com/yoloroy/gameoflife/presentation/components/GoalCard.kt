@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 @Composable
-fun StandardCard(
+fun GoalCard(
     title: String,
     content: String,
     modifier: Modifier = Modifier,
@@ -95,7 +95,7 @@ fun StandardCardPreview() {
         Column(
             modifier = Modifier.padding(12.dp)
         ) {
-            StandardCard(
+            GoalCard(
                 title = "Title",
                 additionToTitle = "*it is preview*",
                 content = "T tex ttextte xtete x te xtex etetxtex etx etxete",
