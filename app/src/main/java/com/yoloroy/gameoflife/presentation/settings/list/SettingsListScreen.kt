@@ -8,7 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.ArrowBack
 import androidx.compose.material.icons.sharp.NavigateNext
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,6 +31,9 @@ fun SettingsListScreen(
     onClickResetStats: () -> Unit = {},
     onClickSignOut: () -> Unit = {}
 ) {
+    var resetStatsDialogShown by remember { mutableStateOf(false) }
+    var signOutDialogShown by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             ActionBar(
@@ -41,10 +44,21 @@ fun SettingsListScreen(
         content = {
             Content(
                 onClickProfileSettings = onClickProfileSettings,
-                onClickResetStats = onClickResetStats,
-                onClickSignOut = onClickSignOut
+                onClickResetStats = { resetStatsDialogShown = true },
+                onClickSignOut = { signOutDialogShown = true }
             )
         }
+    )
+
+    ResetStatsDialog(
+        show = resetStatsDialogShown,
+        onResetStats = onClickResetStats,
+        hide = { resetStatsDialogShown = false }
+    )
+    SignOutDialog(
+        show = signOutDialogShown,
+        onSignOut = onClickSignOut,
+        hide = { signOutDialogShown = false }
     )
 }
 
