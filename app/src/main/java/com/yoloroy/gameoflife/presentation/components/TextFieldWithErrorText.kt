@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.yoloroy.gameoflife.presentation.ui.icons.VisibilityToggle
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 @Composable
@@ -49,6 +50,35 @@ fun TextFieldWithErrorText(
         )
         Spacer(modifier = Modifier.height(2.dp))
     }
+}
+
+@Composable
+fun PasswordTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+    errorMessage: String = "",
+    isError: Boolean = false
+) {
+    var isVisible by remember { mutableStateOf(false) }
+
+    TextFieldWithErrorText(
+        value,
+        onValueChange,
+        label,
+        modifier,
+        errorMessage,
+        isError,
+        trailingIcon = TrailingIcon(
+            image = Icons.Sharp.VisibilityToggle[isVisible],
+            contentDescription = "Toggle password visibility",
+            onClick = { isVisible = !isVisible }
+        ),
+        visualTransformation =
+        if (isVisible) VisualTransformation.None
+        else PasswordVisualTransformation('•')
+    )
 }
 
 data class TrailingIcon(
