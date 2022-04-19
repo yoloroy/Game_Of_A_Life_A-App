@@ -24,6 +24,7 @@ fun GoalCard(
     additionToTitle: String? = null,
     tags: List<String> = emptyList(),
     onClickTag: (String) -> Unit = {},
+    tagView: @Composable (String, () -> Unit) -> Unit = { name, action -> GoalTag(name, action) },
     actions: List<Pair<String, () -> Unit>> = emptyList(),
     onClick: () -> Unit = {}
 ) {
@@ -64,7 +65,7 @@ fun GoalCard(
             modifier = Modifier
         ) {
             items (tags) { tag ->
-                GoalTag(tag) { onClickTag(tag) }
+                tagView(tag) { onClickTag(tag) }
             }
         }
         Row(

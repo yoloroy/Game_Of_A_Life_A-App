@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.yoloroy.gameoflife.presentation.ui.theme
 
 import androidx.compose.material.Colors
@@ -14,7 +16,7 @@ private val ColorPalette = darkColors(
     surface = BlueSurface,
     error = RedError,
     onPrimary = BlueBackground,
-    onSecondary = WhiteText,
+    onSecondary = BlueBackground,
     onBackground = WhiteText,
     onSurface = WhiteText,
     onError = BlueBackground
