@@ -1,5 +1,6 @@
 package com.yoloroy.gameoflife.presentation.dreams
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -27,7 +28,9 @@ fun DreamsPage(
     var tab by remember { mutableStateOf(Dreams) }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
     ) {
         Row(
             modifier = Modifier
