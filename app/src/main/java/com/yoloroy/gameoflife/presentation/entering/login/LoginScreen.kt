@@ -130,7 +130,7 @@ fun LoginScreen(login: (emailOrLogin: String, password: String) -> Unit, moveToR
 
 @Preview
 @Composable
-fun LoginPreview() {
+fun LoginScreenPreview() {
     GameOfLifeTheme {
         Surface(
             Modifier.fillMaxSize(),

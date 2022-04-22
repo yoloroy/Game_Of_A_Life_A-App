@@ -4,30 +4,30 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.yoloroy.gameoflife.presentation.dream_details.DreamDetailsScreenPreview
-import com.yoloroy.gameoflife.presentation.dreams.DreamsPagePreview
+import com.yoloroy.gameoflife.presentation.dreams.DreamsScreenPreview
 import com.yoloroy.gameoflife.presentation.dreams_library.DreamsLibraryScreenPreview
-import com.yoloroy.gameoflife.presentation.entering.login.LoginPreview
-import com.yoloroy.gameoflife.presentation.entering.registration.RegistrationPreview
+import com.yoloroy.gameoflife.presentation.entering.login.LoginScreenPreview
+import com.yoloroy.gameoflife.presentation.entering.registration.RegistrationScreenPreview
 import com.yoloroy.gameoflife.presentation.profile.ProfileScreenPreview
 import com.yoloroy.gameoflife.presentation.settings.list.SettingsListScreenPreview
-import com.yoloroy.gameoflife.presentation.settings.profile.ProfileSettingsPreview
+import com.yoloroy.gameoflife.presentation.settings.profile.ProfileSettingsScreenPreview
 
 @Preview
 @Composable
 fun Login() {
-    LoginPreview()
+    LoginScreenPreview()
 }
 
 @Preview
 @Composable
 fun Registration() {
-    RegistrationPreview()
+    RegistrationScreenPreview()
 }
 
 @Preview
 @Composable
-fun DreamsPage() {
-    DreamsPagePreview()
+fun DreamsScreen() {
+    DreamsScreenPreview()
 }
 
 @ExperimentalMaterialApi
@@ -59,5 +59,5 @@ fun SettingsList() {
 @Preview
 @Composable
 fun ProfileSettings() {
-    ProfileSettingsPreview()
+    ProfileSettingsScreenPreview()
 }

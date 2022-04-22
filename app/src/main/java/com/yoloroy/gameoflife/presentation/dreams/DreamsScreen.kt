@@ -20,7 +20,7 @@ import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 import com.yoloroy.gameoflife.presentation.ui.theme.pressStartFonts
 
 @Composable
-fun DreamsPage(
+fun DreamsScreen(
     onClickAddDream: () -> Unit = {},
     onClickTag: (id: String) -> Unit = {},
     onClickDream: (id: String) -> Unit = {}
@@ -80,9 +80,9 @@ fun DreamsPage(
 
 @Preview(showBackground = true, backgroundColor = 0xFF0E2433)
 @Composable
-fun DreamsPagePreview() {
+fun DreamsScreenPreview() {
     GameOfLifeTheme {
-        DreamsPage()
+        DreamsScreen()
     }
 }
 

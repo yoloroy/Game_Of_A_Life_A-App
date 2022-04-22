@@ -17,7 +17,7 @@ import com.yoloroy.gameoflife.presentation.components.TextFieldWithErrorText
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 @Composable
-fun ProfileSettings(
+fun ProfileSettingsScreen(
     username: String,
     setUserName: (String) -> Unit,
     email: String,
@@ -129,7 +129,7 @@ private fun Content( // TODO error
 
 @Preview
 @Composable
-fun ProfileSettingsPreview() {
+fun ProfileSettingsScreenPreview() {
     GameOfLifeTheme {
         var username by remember { mutableStateOf("AndroidDancer") }
         var email by remember { mutableStateOf("em@i.l") }
@@ -137,7 +137,7 @@ fun ProfileSettingsPreview() {
         var password by remember { mutableStateOf("321") }
         var confirmPassword by remember { mutableStateOf("432") }
 
-        ProfileSettings(
+        ProfileSettingsScreen(
             username, { username = it },
             email, { email = it },
             previousPassword, { previousPassword = it },

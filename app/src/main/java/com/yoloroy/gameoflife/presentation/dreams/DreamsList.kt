@@ -14,7 +14,7 @@ import com.yoloroy.gameoflife.presentation.components.GoalCard
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 @Composable
-fun DreamsList(
+internal fun DreamsList(
     dreams: List<Dream>,
     onClickAddDream: () -> Unit = {},
     onClickTag: (String) -> Unit = {},

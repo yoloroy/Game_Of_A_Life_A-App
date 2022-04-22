@@ -140,7 +140,7 @@ fun RegistrationScreen(onRegister: (email: String, login: String, password: Stri
 
 @Preview
 @Composable
-fun RegistrationPreview() {
+fun RegistrationScreenPreview() {
     GameOfLifeTheme {
         Surface(
             Modifier.fillMaxSize(),

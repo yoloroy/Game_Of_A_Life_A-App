@@ -13,7 +13,7 @@ import com.yoloroy.gameoflife.presentation.components.GoalCard
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 
 @Composable
-fun ChallengesList(
+internal fun ChallengesList(
     challenges: List<ChallengeCardData>,
     onClickComplete: (id: String) -> Unit = {},
     onClickChallenge: (id: String) -> Unit = {}
