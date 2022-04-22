@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yoloroy.gameoflife.domain.model.Dream
 import com.yoloroy.gameoflife.presentation.components.GoalTab
 import com.yoloroy.gameoflife.presentation.dreams.DreamsPageTab.Challenges
 import com.yoloroy.gameoflife.presentation.dreams.DreamsPageTab.Dreams
@@ -21,11 +22,15 @@ import com.yoloroy.gameoflife.presentation.ui.theme.pressStartFonts
 
 @Composable
 fun DreamsScreen(
+    dreams: List<Dream>,
+    challenges: List<ChallengeCardData>,
     onClickAddDream: () -> Unit = {},
     onClickTag: (id: String) -> Unit = {},
-    onClickDream: (id: String) -> Unit = {}
+    onClickDream: (id: String) -> Unit = {},
+    onClickCompleteChallenge: (id: String) -> Unit = {},
+    onClickChallenge: (id: String) -> Unit = {}
 ) {
-    var tab by remember { mutableStateOf(Dreams) }
+    var tab by remember { mutableStateOf(Challenges) }
 
     Column(
         modifier = Modifier
@@ -74,7 +79,10 @@ fun DreamsScreen(
                 icon = Icons.Sharp.Checklist
             )
         }
-        // TODO pager
+        when (tab) {
+            Dreams -> DreamsList(dreams, onClickAddDream, onClickTag, onClickDream)
+            Challenges -> ChallengesList(challenges, onClickCompleteChallenge, onClickChallenge)
+        }
     }
 }
 
@@ -82,7 +90,7 @@ fun DreamsScreen(
 @Composable
 fun DreamsScreenPreview() {
     GameOfLifeTheme {
-        DreamsScreen()
+        DreamsScreen(emptyList(), emptyList())
     }
 }
 
