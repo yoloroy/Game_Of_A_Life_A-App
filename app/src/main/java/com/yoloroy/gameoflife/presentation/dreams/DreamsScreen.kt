@@ -8,27 +8,55 @@ import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material.icons.sharp.Checklist
 import androidx.compose.material.icons.sharp.TaskAlt
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.yoloroy.gameoflife.domain.model.Dream
 import com.yoloroy.gameoflife.presentation.components.GoalTab
 import com.yoloroy.gameoflife.presentation.dreams.DreamsPageTab.Challenges
 import com.yoloroy.gameoflife.presentation.dreams.DreamsPageTab.Dreams
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 import com.yoloroy.gameoflife.presentation.ui.theme.pressStartFonts
+import com.yoloroy.gameoflife.presentation.util.Screen
+
+@Composable
+fun DreamsScreen(navController: NavController, viewModel: DreamsViewModel = hiltViewModel()) {
+    val dreams by viewModel.dreams.observeAsState()
+    val challenges by viewModel.challenges.observeAsState()
+
+    DreamsScreen(
+        dreams = dreams?.data ?: emptyList(), /*TODO error*/
+        challenges = challenges?.data ?: emptyList(), /*TODO error*/
+        onClickAddDream = {
+            navController.navigate(Screen.DreamsLibraryScreen.route)
+        },
+        onClickTag = {
+            navController.navigate("${Screen.DreamsLibraryScreen.route}?tag=$it")
+        },
+        onClickDream = { dreamId ->
+            navController.navigate("${Screen.DreamsDetailsScreen.route}/$dreamId")
+        },
+        onClickCompleteChallenge = { challengeId ->
+            viewModel.completeChallenge(challengeId)
+        },
+        onClickChallenge = {}
+    )
+}
 
 @Composable
 fun DreamsScreen(
     dreams: List<Dream>,
     challenges: List<ChallengeCardData>,
     onClickAddDream: () -> Unit = {},
-    onClickTag: (id: String) -> Unit = {},
-    onClickDream: (id: String) -> Unit = {},
-    onClickCompleteChallenge: (id: String) -> Unit = {},
-    onClickChallenge: (id: String) -> Unit = {}
+    onClickTag: (String) -> Unit = {},
+    onClickDream: (dreamId: String) -> Unit = {},
+    onClickCompleteChallenge: (challengeId: String) -> Unit = {},
+    onClickChallenge: (challengeId: String) -> Unit = {}
 ) {
     var tab by remember { mutableStateOf(Challenges) }
 
