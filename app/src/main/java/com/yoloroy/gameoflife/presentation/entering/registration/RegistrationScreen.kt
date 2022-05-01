@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.PersonAddAlt
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -16,17 +17,45 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.yoloroy.gameoflife.presentation.components.TextFieldWithErrorText
 import com.yoloroy.gameoflife.presentation.components.TrailingIcon
 import com.yoloroy.gameoflife.presentation.ui.icons.VisibilityToggle
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
+import com.yoloroy.gameoflife.presentation.util.Screen
 
 @Composable
-fun RegistrationScreen(onRegister: (email: String, login: String, password: String) -> Unit, moveToLogin: () -> Unit) {
-    var email by remember { mutableStateOf("") }
-    var login by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun RegistrationScreen(navController: NavController, viewModel: RegistrationViewModel = hiltViewModel()) {
+    with(viewModel) {
+        val email by viewModel.email.observeAsState()
+        val login by viewModel.login.observeAsState()
+        val password by viewModel.password.observeAsState()
 
+        RegistrationScreen(
+            email = email!!,
+            login = login!!,
+            password = password!!,
+            onEmailUpdate = ::onEmailUpdate,
+            onLoginUpdate = ::onLoginUpdate,
+            onPasswordUpdate = ::onPasswordUpdate,
+            onRegister = ::onRegister,
+            moveToLogin = { navController.navigate(Screen.LoginScreen.route) }
+        )
+    }
+}
+
+@Composable
+fun RegistrationScreen(
+    email: String,
+    login: String,
+    password: String,
+    onEmailUpdate: (String) -> Unit = {},
+    onLoginUpdate: (String) -> Unit = {},
+    onPasswordUpdate: (String) -> Unit = {},
+    onRegister: (email: String, login: String, password: String) -> Unit = { _, _, _ ->},
+    moveToLogin: () -> Unit = {}
+) {
     var isPasswordVisible by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -71,7 +100,7 @@ fun RegistrationScreen(onRegister: (email: String, login: String, password: Stri
                 // email
                 TextFieldWithErrorText(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = onEmailUpdate,
                     label = "Email",
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -80,7 +109,7 @@ fun RegistrationScreen(onRegister: (email: String, login: String, password: Stri
                 // login
                 TextFieldWithErrorText(
                     value = login,
-                    onValueChange = { login = it },
+                    onValueChange = onLoginUpdate,
                     label = "Login",
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -89,7 +118,7 @@ fun RegistrationScreen(onRegister: (email: String, login: String, password: Stri
                 // password
                 TextFieldWithErrorText(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = onPasswordUpdate,
                     label = "Password",
                     trailingIcon = TrailingIcon(
                         image = Icons.Sharp.VisibilityToggle[isPasswordVisible],
@@ -146,7 +175,7 @@ fun RegistrationScreenPreview() {
             Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            RegistrationScreen({ _, _, _ -> }, {})
+            RegistrationScreen("em@i.l", "", "")
         }
     }
 }
