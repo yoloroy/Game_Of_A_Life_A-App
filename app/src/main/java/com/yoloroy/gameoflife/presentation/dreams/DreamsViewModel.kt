@@ -10,13 +10,13 @@ import kotlinx.coroutines.launch
 
 class DreamsViewModel(private val dreamsRepository: DreamsRepository) : ViewModel() {
 
-    private var _dreams: MutableLiveData<Resource<List<Dream>, String?>> =
+    private var _dreams: MutableLiveData<Resource<List<Dream>>> =
         MutableLiveData(Resource.Loading())
-    val dreams: LiveData<Resource<List<Dream>, String?>> = _dreams
+    val dreams: LiveData<Resource<List<Dream>>> = _dreams
 
-    private var _challenges: MutableLiveData<Resource<List<ChallengeWithDreamInfo>, String?>> =
+    private var _challenges: MutableLiveData<Resource<List<ChallengeWithDreamInfo>>> =
         MutableLiveData(Resource.Loading())
-    val challenges: LiveData<Resource<List<ChallengeCardData>, String?>> = _challenges.toCardData()
+    val challenges: LiveData<Resource<List<ChallengeCardData>>> = _challenges.toCardData()
 
     fun completeChallenge(challengeId: String) {
         val dreamId = _challenges.value?.data?.find { it.id == challengeId }?.dreamId!!
@@ -29,20 +29,20 @@ class DreamsViewModel(private val dreamsRepository: DreamsRepository) : ViewMode
             _dreams.value = try {
                 Resource.Success(dreamsRepository.getDreams())
             } catch (e: Exception) { // TODO
-                Resource.Error(e.localizedMessage)
+                Resource.Error(e)
             }
         }
         viewModelScope.launch {
             _challenges.value = try {
                 Resource.Success(dreamsRepository.getCurrentChallenges())
             } catch (e: Exception) { // TODO
-                Resource.Error(e.localizedMessage)
+                Resource.Error(e)
             }
         }
     }
 }
 
-private fun LiveData<Resource<List<ChallengeWithDreamInfo>, String?>>.toCardData() = Transformations
+private fun LiveData<Resource<List<ChallengeWithDreamInfo>>>.toCardData() = Transformations
     .map(this) { resource ->
         resource.transform { list ->
             list.map(ChallengeWithDreamInfo::toCardData)

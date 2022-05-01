@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun DreamsLibraryScreen(
     tagsState: MutableState<List<String>>,
-    dreams: MutableState<Resource<List<Dream>, Unit?/*TODO*/>>,
+    dreams: MutableState<Resource<List<Dream>>>,
     onClickBack: () -> Unit = {},
     onClickTagInDream: (String) -> Unit = {},
     onClickDream: (id: String) -> Unit = {}
@@ -69,7 +69,7 @@ fun DreamsLibraryScreen(
 
 @Composable
 private fun DreamsLayer(
-    dreams: Resource<List<Dream>, Unit?/*TODO*/>,
+    dreams: Resource<List<Dream>>,
     onClickTag: (String) -> Unit,
     onClickDream: (id: String) -> Unit
 ) {
@@ -221,7 +221,7 @@ fun DreamsLibraryScreenPreview() {
             tags = listOf("IT", "Android", "Preview")
         )
     )
-    val dreamsState: MutableState<Resource<List<Dream>, Unit?>> = mutableStateOf(Resource.Success(dreams))
+    val dreamsState: MutableState<Resource<List<Dream>>> = mutableStateOf(Resource.Success(dreams))
 
     val tagsState = mutableStateOf(listOf("Android", "IT", "Easy start"))
     val tagsStateFlow = MutableStateFlow(tagsState.value)
