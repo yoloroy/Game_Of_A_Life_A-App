@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Login
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -16,16 +17,45 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.yoloroy.gameoflife.presentation.components.TextFieldWithErrorText
 import com.yoloroy.gameoflife.presentation.components.TrailingIcon
 import com.yoloroy.gameoflife.presentation.ui.icons.VisibilityToggle
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
+import com.yoloroy.gameoflife.presentation.util.Screen
 
 @Composable
-fun LoginScreen(login: (emailOrLogin: String, password: String) -> Unit, moveToRegister: () -> Unit) {
-    var emailOrLogin by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {
+    with(viewModel) {
+        val emailOrLogin by viewModel.emailOrLogin.observeAsState()
+        val password by viewModel.password.observeAsState()
 
+        LoginScreen(
+            emailOrLogin = emailOrLogin!!,
+            password = password!!,
+            onEmailOrLoginUpdate = ::updateEmailOrLogin,
+            onPasswordUpdate = ::updatePassword,
+            onClickSignIn = {
+                signIn(
+                    onSuccess = { navController.navigate(Screen.DreamsScreen.route) },
+                    onFailure = { /*TODO*/ }
+                )
+            },
+            moveToRegister = { navController.navigate(Screen.RegistrationScreen.route) }
+        )
+    }
+}
+
+@Composable
+fun LoginScreen(
+    emailOrLogin: String,
+    password: String,
+    onEmailOrLoginUpdate: (String) -> Unit = {},
+    onPasswordUpdate: (String) -> Unit = {},
+    onClickSignIn: () -> Unit = {},
+    moveToRegister: () -> Unit = {}
+) {
     var isPasswordVisible by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -70,7 +100,7 @@ fun LoginScreen(login: (emailOrLogin: String, password: String) -> Unit, moveToR
                 // email or login
                 TextFieldWithErrorText( // TODO error
                     value = emailOrLogin,
-                    onValueChange = { emailOrLogin = it },
+                    onValueChange = onEmailOrLoginUpdate,
                     label = "Email or Login",
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -79,7 +109,7 @@ fun LoginScreen(login: (emailOrLogin: String, password: String) -> Unit, moveToR
                 // password
                 TextFieldWithErrorText( // TODO error
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = onPasswordUpdate,
                     label = "Password",
                     trailingIcon = TrailingIcon(
                         image = Icons.Sharp.VisibilityToggle[isPasswordVisible],
@@ -116,7 +146,7 @@ fun LoginScreen(login: (emailOrLogin: String, password: String) -> Unit, moveToR
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { login(emailOrLogin, password) }
+                onClick = { onClickSignIn() }
             ) {
                 Icon(
                     imageVector = Icons.Sharp.Login,
@@ -136,7 +166,10 @@ fun LoginScreenPreview() {
             Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
-            LoginScreen({ _, _ -> }, {})
+            val emailOrLogin by remember { mutableStateOf("") }
+            val password by remember { mutableStateOf("") }
+
+            LoginScreen(emailOrLogin, password)
         }
     }
 }
