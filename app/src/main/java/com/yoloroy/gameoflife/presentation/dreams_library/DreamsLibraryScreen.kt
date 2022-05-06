@@ -1,6 +1,7 @@
 package com.yoloroy.gameoflife.presentation.dreams_library
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -12,11 +13,14 @@ import androidx.compose.material.icons.sharp.ArrowBack
 import androidx.compose.material.icons.sharp.Close
 import androidx.compose.material.icons.sharp.Tune
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowRow
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.Dream
@@ -24,22 +28,41 @@ import com.yoloroy.gameoflife.presentation.components.GoalCard
 import com.yoloroy.gameoflife.presentation.components.GoalTag
 import com.yoloroy.gameoflife.presentation.ui.icons.ToggleIcon
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onEach
+import com.yoloroy.gameoflife.presentation.util.Screen
 
-@Suppress("SuspiciousCollectionReassignment")
+@ExperimentalMaterialApi
+@Composable
+fun DreamsLibraryScreen(navController: NavController, viewModel: DreamsLibraryViewModel = hiltViewModel()) {
+    with(viewModel) {
+        val tags by tags.observeAsState()
+        val dreams by dreams.observeAsState()
+
+        BackHandler(true, navController::popBackStack)
+        DreamsLibraryScreen(
+            tags = tags!!.toList(),
+            dreams = dreams!!,
+            onAddTag = ::addTag,
+            onRemoveTag = ::removeTag,
+            onClickBack = navController::popBackStack,
+            onClickTagInDream = ::addTag,
+            onClickDream = { navController.navigate("${Screen.DreamsDetailsScreen.route}/$it") }
+        )
+    }
+}
+
 @ExperimentalMaterialApi
 @Composable
 fun DreamsLibraryScreen(
-    tagsState: MutableState<List<String>>,
-    dreams: MutableState<Resource<List<Dream>>>,
+    tags: List<String>,
+    dreams: Resource<List<Dream>>,
+    onAddTag: (String) -> Unit = {},
+    onRemoveTag: (String) -> Unit = {},
     onClickBack: () -> Unit = {},
     onClickTagInDream: (String) -> Unit = {},
     onClickDream: (id: String) -> Unit = {}
 ) {
     val backdropState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
     var isConcealed by remember { mutableStateOf(backdropState.isConcealed) }
-    var tags by remember { tagsState }
 
     LaunchedEffect(backdropState) {
         if (isConcealed) {
@@ -56,14 +79,10 @@ fun DreamsLibraryScreen(
             onClickOptions = { isConcealed = !isConcealed },
             isRevealed = backdropState.isConcealed
         ) },
-        backLayerContent = { SearchTuningLayer(
-            tags = tags,
-            onAddTag = { tags = (tags + it).distinct() }, // TODO refactor
-            onRemoveTag = { tags -= it } // TODO refactor
-        ) },
-        frontLayerContent = { DreamsLayer(dreams.value, onClickTagInDream, onClickDream) },
+        backLayerContent = { SearchTuningLayer(tags, onAddTag, onRemoveTag) },
+        frontLayerContent = { DreamsLayer(dreams, onClickTagInDream, onClickDream) },
         backLayerBackgroundColor = MaterialTheme.colors.background,
-        frontLayerShape = CutCornerShape(topStart = 12.dp/*, topEnd = 12.dp*/)
+        frontLayerShape = CutCornerShape(topStart = 12.dp)
     )
 }
 
@@ -175,7 +194,10 @@ private fun SearchTuningLayer(
         TagField(
             value = searchFieldValue,
             onValueChange = { searchFieldValue = it },
-            onAddTag = onAddTag
+            onAddTag = {
+                onAddTag(it)
+                searchFieldValue = ""
+            }
         )
         Spacer(modifier = Modifier.height(12.dp))
         FlowRow {
@@ -221,16 +243,9 @@ fun DreamsLibraryScreenPreview() {
             tags = listOf("IT", "Android", "Preview")
         )
     )
-    val dreamsState: MutableState<Resource<List<Dream>>> = mutableStateOf(Resource.Success(dreams))
-
-    val tagsState = mutableStateOf(listOf("Android", "IT", "Easy start"))
-    val tagsStateFlow = MutableStateFlow(tagsState.value)
-    tagsStateFlow.onEach {
-        tagsState.value = it
-        // TODO loading
-    }
+    val tags = listOf("Android", "IT", "Easy start")
 
     GameOfLifeTheme {
-        DreamsLibraryScreen(tagsState, dreamsState)
+        DreamsLibraryScreen(tags, Resource.Success(dreams))
     }
 }
