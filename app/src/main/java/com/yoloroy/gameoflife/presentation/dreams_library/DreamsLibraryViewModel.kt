@@ -7,9 +7,14 @@ import com.yoloroy.gameoflife.domain.repository.DreamsLibraryRepository
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class DreamsLibraryViewModel(private val repository: DreamsLibraryRepository) : ViewModel() {
+class DreamsLibraryViewModel(
+    private val repository: DreamsLibraryRepository,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-    private val _tags: MutableLiveData<Set<String>> = MutableLiveData(emptySet())
+    private val _tags: MutableLiveData<Set<String>> = MutableLiveData(
+        savedStateHandle.get<Array<String>>("tags")?.toSet() ?: emptySet()
+    )
     val tags: LiveData<Set<String>> = _tags
 
     private val _dreams: MutableLiveData<Resource<List<Dream>>> = MutableLiveData(Resource.Loading())
