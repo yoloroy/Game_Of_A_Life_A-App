@@ -39,7 +39,11 @@ fun RegistrationScreen(navController: NavController, viewModel: RegistrationView
             onEmailUpdate = ::onEmailUpdate,
             onLoginUpdate = ::onLoginUpdate,
             onPasswordUpdate = ::onPasswordUpdate,
-            onRegister = ::onRegister,
+            onClickRegister = {
+                register(email!!, login!!, password!!) {
+                    navController.navigate(Screen.DreamsScreen.route)
+                }
+            },
             moveToLogin = { navController.navigate(Screen.LoginScreen.route) }
         )
     }
@@ -53,7 +57,7 @@ fun RegistrationScreen(
     onEmailUpdate: (String) -> Unit = {},
     onLoginUpdate: (String) -> Unit = {},
     onPasswordUpdate: (String) -> Unit = {},
-    onRegister: (email: String, login: String, password: String) -> Unit = { _, _, _ ->},
+    onClickRegister: () -> Unit = {},
     moveToLogin: () -> Unit = {}
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -154,9 +158,7 @@ fun RegistrationScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onRegister(email, login, password) }
-            ) {
+            FloatingActionButton(onClick = onClickRegister) {
                 Icon(
                     imageVector = Icons.Sharp.PersonAddAlt,
                     tint = MaterialTheme.colors.background,

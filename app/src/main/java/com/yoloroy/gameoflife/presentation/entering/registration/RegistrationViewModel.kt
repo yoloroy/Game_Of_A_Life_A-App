@@ -3,8 +3,11 @@ package com.yoloroy.gameoflife.presentation.entering.registration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.yoloroy.gameoflife.domain.repository.RegistrationRepository
+import kotlinx.coroutines.launch
 
-class RegistrationViewModel : ViewModel() {
+class RegistrationViewModel(val repository: RegistrationRepository) : ViewModel() {
 
     private val _email: MutableLiveData<String> = MutableLiveData("")
     val email: LiveData<String> = _email
@@ -27,5 +30,12 @@ class RegistrationViewModel : ViewModel() {
         _password.value = password
     }
 
-    fun onRegister(email: String, login: String, password: String) {}
+    fun register(email: String, login: String, password: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            when (repository.register(email, login, password)) {
+                true -> onSuccess()
+                else -> TODO()
+            }
+        }
+    }
 }
