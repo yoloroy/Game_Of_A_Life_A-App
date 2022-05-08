@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.yoloroy.gameoflife.domain.model.Dream
 import com.yoloroy.gameoflife.domain.model.Profile
 import com.yoloroy.gameoflife.domain.model.Skill
@@ -21,6 +23,27 @@ import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 import com.yoloroy.gameoflife.presentation.ui.theme.disabled
 import com.yoloroy.gameoflife.presentation.ui.theme.text
 import com.yoloroy.gameoflife.presentation.ui.theme.warning
+import com.yoloroy.gameoflife.presentation.util.Screen
+
+@ExperimentalMaterialApi
+@Composable
+fun SettingsListScreen(navController: NavController, viewModel: SettingsListViewModel = hiltViewModel()) {
+    SettingsListScreen(
+        profile = viewModel.profile,
+        onClickBack = navController::popBackStack,
+        onClickProfileSettings = { navController.navigate(Screen.ProfileSettingsScreen.route) },
+        onClickResetStats = {
+            viewModel.resetStats {
+                navController.navigate(Screen.ProfileScreen.route)
+            }
+        },
+        onClickSignOut = {
+            viewModel.signOut {
+                navController.navigate(Screen.LoginScreen.route)
+            }
+        }
+    )
+}
 
 @ExperimentalMaterialApi
 @Composable
