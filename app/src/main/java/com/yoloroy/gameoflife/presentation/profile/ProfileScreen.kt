@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowRow
 import com.skydoves.landscapist.glide.GlideImage
 import com.yoloroy.gameoflife.R
@@ -24,9 +26,19 @@ import com.yoloroy.gameoflife.domain.model.Skill
 import com.yoloroy.gameoflife.presentation.ui.icons.ExpandToggle
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 import com.yoloroy.gameoflife.presentation.ui.theme.text
+import com.yoloroy.gameoflife.presentation.util.Screen
 
 @Composable
-fun ProfileScreen(profile: Profile, onClickSettings: () -> Unit) {
+fun ProfileScreen(navController: NavController, viewModel: ProfileViewModel = hiltViewModel()) {
+    ProfileScreen(
+        profile = viewModel.profile,
+        onClickSettings = { navController.navigate(Screen.SettingsListScreen.route) },
+        onClickDream = { (id) -> navController.navigate(Screen.DreamsDetailsScreen.route + "/$id") }
+    )
+}
+
+@Composable
+fun ProfileScreen(profile: Profile, onClickSettings: () -> Unit = {}, onClickDream: (Dream) -> Unit = {}) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -37,7 +49,7 @@ fun ProfileScreen(profile: Profile, onClickSettings: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
         SkillsList(profile.skills)
         Spacer(modifier = Modifier.height(24.dp))
-        FulfilledDreams(profile.fulfilledDreams) {}
+        FulfilledDreams(profile.fulfilledDreams, onClickDream)
     }
 }
 
@@ -179,7 +191,7 @@ fun ProfileScreenPreview() {
                         Dream("-1", "Your first fulfilled dream", "...", emptyList())
                     )
                 )
-            ) {}
+            )
         }
     }
 }
