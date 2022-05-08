@@ -12,9 +12,34 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.yoloroy.gameoflife.presentation.components.PasswordTextField
 import com.yoloroy.gameoflife.presentation.components.TextFieldWithErrorText
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
+import com.yoloroy.gameoflife.presentation.util.Screen
+
+@Composable
+fun ProfileSettingsScreen(navController: NavController, viewModel: ProfileSettingsViewModel = hiltViewModel()) {
+    ProfileSettingsScreen(
+        username = viewModel.username,
+        setUserName = viewModel::username::set,
+        email = viewModel.email,
+        setEmail = viewModel::email::set,
+        previousPassword = viewModel.previousPassword,
+        setPreviousPassword = viewModel::previousPassword::set,
+        password = viewModel.password,
+        setPassword = viewModel::password::set,
+        confirmPassword = viewModel.confirmPassword,
+        setConfirmPassword = viewModel::confirmPassword::set,
+        onClickBack = navController::popBackStack,
+        confirm = {
+            viewModel.confirmChanges {
+                navController.navigate(Screen.ProfileScreen.route)
+            }
+        }
+    )
+}
 
 @Composable
 fun ProfileSettingsScreen(
