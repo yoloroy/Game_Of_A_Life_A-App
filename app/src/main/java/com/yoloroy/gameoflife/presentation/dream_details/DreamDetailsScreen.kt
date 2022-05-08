@@ -1,5 +1,6 @@
 package com.yoloroy.gameoflife.presentation.dream_details
 
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,16 +16,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.Challenge
 import com.yoloroy.gameoflife.domain.model.DreamDetail
 import com.yoloroy.gameoflife.domain.model.Skill
 import com.yoloroy.gameoflife.presentation.components.GoalCard
 import com.yoloroy.gameoflife.presentation.components.GoalTag
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
+import com.yoloroy.gameoflife.presentation.util.Screen
+
+@Composable
+fun DreamDetailsScreen(navController: NavController, viewModel: DreamDetailsViewModel = hiltViewModel()) {
+    with(viewModel) {
+        DreamDetailsScreen(
+            dream = dream,
+            mode = mode,
+            onClickBack = { navController.popBackStack() },
+            onClickAdd = ::addDream,
+            onClickDelete = ::removeDream,
+            onClickTag = { tag ->
+                val tagsArg = Uri.encode(arrayOf(tag).toString())
+                navController.navigate(Screen.DreamsLibraryScreen.route + "?tags=$tagsArg") }
+        )
+    }
+}
 
 @Composable
 fun DreamDetailsScreen(
-    dream: DreamDetail,
+    dream: Resource<DreamDetail>,
     mode: DreamDetailsMode,
     onClickBack: () -> Unit = {},
     onClickAdd: () -> Unit = {},
@@ -44,15 +65,21 @@ fun DreamDetailsScreen(
         ) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                topBar = { ActionBar(dream, mode, onClickBack, onClickAdd, onClickDelete) },
-                content = { Content(dream, onClickTag) }
+                topBar = { ActionBar(dream.data?.name ?: "", mode, onClickBack, onClickAdd, onClickDelete) },
+                content = {
+                    when (dream) {
+                        is Resource.Success -> DreamContent(dream.data!!, onClickTag)
+                        is Resource.Loading -> LoadingContent()
+                        is Resource.Error -> ErrorContent()
+                    }
+                }
             )
         }
     }
 }
 
 @Composable
-private fun Content(dream: DreamDetail, onClickTag: (String) -> Unit) {
+private fun DreamContent(dream: DreamDetail, onClickTag: (String) -> Unit) {
     LazyColumn(
         modifier = Modifier.padding(horizontal = 16.dp),
         contentPadding = PaddingValues(vertical = 8.dp),
@@ -90,8 +117,18 @@ private fun Content(dream: DreamDetail, onClickTag: (String) -> Unit) {
 }
 
 @Composable
+fun LoadingContent() {
+    // TODO
+}
+
+@Composable
+fun ErrorContent() {
+    // TODO
+}
+
+@Composable
 private fun ActionBar(
-    dream: DreamDetail,
+    dreamName: String,
     mode: DreamDetailsMode,
     onClickBack: () -> Unit,
     onClickAdd: () -> Unit,
@@ -108,7 +145,7 @@ private fun ActionBar(
         },
         title = {
             Text(
-                text = dream.name,
+                text = dreamName,
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.subtitle1,
                 fontWeight = FontWeight.Bold
@@ -139,43 +176,45 @@ private fun ActionBar(
 @Composable
 fun DreamDetailsScreenPreview() {
     GameOfLifeTheme {
-        var mode by remember { mutableStateOf(DreamDetailsMode.View) }
+        var mode by remember { mutableStateOf(DreamDetailsMode.Adding) }
 
         DreamDetailsScreen(
-            dream = DreamDetail(
-                "-1",
-                "Android in one hour",
-                "Learn how to build hello word application",
-                listOf("IT", "Android", "Easy start"),
-                listOf(
-                    Challenge(
-                        "-1",
-                        "Download things",
-                        "*Instructions on what and how to download*",
-                        1
-                    ),
-                    Challenge(
-                        "-1",
-                        "Install things",
-                        "*Instructions on what and how to install*",
-                        2
-                    ),
-                    Challenge(
-                        "-1",
-                        "Create new project",
-                        "*Instructions on how to create new project*",
-                        3
-                    ),
-                    Challenge(
-                        "-1",
-                        "Wait for first build",
-                        "Just wait",
-                        4,
-                        listOf(Skill("Endurance", 1))
+            dream = Resource.Success(
+                DreamDetail(
+                    "-1",
+                    "Android in one hour",
+                    "Learn how to build hello word application",
+                    listOf("IT", "Android", "Easy start"),
+                    listOf(
+                        Challenge(
+                            "-1",
+                            "Download things",
+                            "*Instructions on what and how to download*",
+                            1
+                        ),
+                        Challenge(
+                            "-1",
+                            "Install things",
+                            "*Instructions on what and how to install*",
+                            2
+                        ),
+                        Challenge(
+                            "-1",
+                            "Create new project",
+                            "*Instructions on how to create new project*",
+                            3
+                        ),
+                        Challenge(
+                            "-1",
+                            "Wait for first build",
+                            "Just wait",
+                            4,
+                            listOf(Skill("Endurance", 1))
+                        )
                     )
                 )
             ),
-            mode = DreamDetailsMode.Adding,
+            mode = mode,
             onClickBack = {},
             onClickAdd = { mode = DreamDetailsMode.Removing },
             onClickDelete = { mode = DreamDetailsMode.Adding }
