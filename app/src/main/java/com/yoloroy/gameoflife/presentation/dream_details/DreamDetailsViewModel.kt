@@ -11,12 +11,14 @@ import com.yoloroy.gameoflife.domain.model.DreamDetail
 import com.yoloroy.gameoflife.domain.repository.DreamDetailsRepository
 import com.yoloroy.gameoflife.presentation.dream_details.DreamDetailsMode.Adding
 import com.yoloroy.gameoflife.presentation.dream_details.DreamDetailsMode.Removing
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DreamDetailsViewModel(
+@HiltViewModel
+class DreamDetailsViewModel @Inject constructor(
     val repository: DreamDetailsRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -29,12 +31,15 @@ class DreamDetailsViewModel(
         private set
 
     init {
-        repository.getDreamById(dreamId)
-            .onEach { dream = it }
-
-        repository.getIsSubscribedOnDream(dreamId)
-            .map { isSubscribed -> if (isSubscribed) Removing else Adding }
-            .onEach { mode = it }
+        viewModelScope.launch {
+            repository.getDreamById(dreamId)
+                .collect { dream = it }
+        }
+        viewModelScope.launch {
+            repository.getIsSubscribedOnDream(dreamId)
+                .transform<Boolean, DreamDetailsMode> { isSubscribed -> if (isSubscribed) Removing else Adding }
+                .collect { mode = it }
+        }
     }
 
     fun addDream() {

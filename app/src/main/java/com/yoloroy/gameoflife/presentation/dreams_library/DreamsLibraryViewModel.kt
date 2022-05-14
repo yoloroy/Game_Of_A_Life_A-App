@@ -4,10 +4,12 @@ import androidx.lifecycle.*
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.Dream
 import com.yoloroy.gameoflife.domain.repository.DreamsLibraryRepository
-import kotlinx.coroutines.flow.onEach
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DreamsLibraryViewModel(
+@HiltViewModel
+class DreamsLibraryViewModel @Inject constructor(
     private val repository: DreamsLibraryRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -32,7 +34,7 @@ class DreamsLibraryViewModel(
         viewModelScope.launch {
             repository
                 .getDreamsByTags(tags!!)
-                .onEach { _dreams.value = it }
+                .collect { _dreams.value = it }
         }
     }
 

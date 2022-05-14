@@ -6,9 +6,14 @@ import com.yoloroy.gameoflife.common.transform
 import com.yoloroy.gameoflife.domain.model.ChallengeWithDreamInfo
 import com.yoloroy.gameoflife.domain.model.Dream
 import com.yoloroy.gameoflife.domain.repository.DreamsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DreamsViewModel(private val dreamsRepository: DreamsRepository) : ViewModel() {
+@HiltViewModel
+class DreamsViewModel @Inject constructor(
+    private val dreamsRepository: DreamsRepository
+) : ViewModel() {
 
     private var _dreams: MutableLiveData<Resource<List<Dream>>> =
         MutableLiveData(Resource.Loading())

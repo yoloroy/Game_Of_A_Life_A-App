@@ -5,9 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yoloroy.gameoflife.domain.repository.RegistrationRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegistrationViewModel(val repository: RegistrationRepository) : ViewModel() {
+@HiltViewModel
+class RegistrationViewModel @Inject constructor(
+    val repository: RegistrationRepository
+) : ViewModel() {
 
     private val _email: MutableLiveData<String> = MutableLiveData("")
     val email: LiveData<String> = _email

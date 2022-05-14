@@ -4,8 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.yoloroy.gameoflife.domain.repository.ProfileRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ProfileViewModel(val repository: ProfileRepository) : ViewModel() {
+@HiltViewModel
+class ProfileViewModel @Inject constructor(val repository: ProfileRepository) : ViewModel() {
 
     val profile by mutableStateOf(repository.profile)
 }

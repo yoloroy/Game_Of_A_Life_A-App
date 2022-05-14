@@ -6,8 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.yoloroy.gameoflife.domain.repository.LoginRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(val loginRepository: LoginRepository) : ViewModel() {
 
     private val _emailOrLogin: MutableLiveData<String> = MutableLiveData("")
     val emailOrLogin: LiveData<String> = _emailOrLogin
