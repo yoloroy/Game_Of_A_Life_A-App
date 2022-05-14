@@ -117,12 +117,12 @@ private fun DreamContent(dream: DreamDetail, onClickTag: (String) -> Unit) {
 }
 
 @Composable
-fun LoadingContent() {
-    // TODO
+private fun LoadingContent() {
+    CircularProgressIndicator()
 }
 
 @Composable
-fun ErrorContent() {
+private fun ErrorContent() {
     // TODO
 }
 
