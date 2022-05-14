@@ -17,7 +17,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.yoloroy.gameoflife.domain.model.Dream
+import com.yoloroy.gameoflife.presentation.components.BottomNavigationScreen
 import com.yoloroy.gameoflife.presentation.components.GoalTab
+import com.yoloroy.gameoflife.presentation.components.WithMainNavigationBar
 import com.yoloroy.gameoflife.presentation.dreams.DreamsPageTab.Challenges
 import com.yoloroy.gameoflife.presentation.dreams.DreamsPageTab.Dreams
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
@@ -29,40 +31,46 @@ fun DreamsScreen(navController: NavController, viewModel: DreamsViewModel = hilt
     val dreams by viewModel.dreams.observeAsState()
     val challenges by viewModel.challenges.observeAsState()
 
-    DreamsScreen(
-        dreams = dreams?.data ?: emptyList(), /*TODO error*/
-        challenges = challenges?.data ?: emptyList(), /*TODO error*/
-        onClickAddDream = {
-            navController.navigate(Screen.DreamsLibraryScreen.route)
-        },
-        onClickTag = {
-            navController.navigate("${Screen.DreamsLibraryScreen.route}?tag=$it")
-        },
-        onClickDream = { dreamId ->
-            navController.navigate("${Screen.DreamsDetailsScreen.route}/$dreamId")
-        },
-        onClickCompleteChallenge = { challengeId ->
-            viewModel.completeChallenge(challengeId)
-        },
-        onClickChallenge = {}
-    )
+    WithMainNavigationBar(
+        currentScreen = BottomNavigationScreen(Screen.DreamsScreen),
+        navController = navController
+    ) {
+        DreamsScreen(
+            dreams = dreams?.data ?: emptyList(), /*TODO error*/
+            challenges = challenges?.data ?: emptyList(), /*TODO error*/
+            modifier = Modifier.weight(1f),
+            onClickAddDream = {
+                navController.navigate(Screen.DreamsLibraryScreen.route)
+            },
+            onClickTag = {
+                navController.navigate("${Screen.DreamsLibraryScreen.route}?tag=$it")
+            },
+            onClickDream = { dreamId ->
+                navController.navigate("${Screen.DreamsDetailsScreen.route}/$dreamId")
+            },
+            onClickCompleteChallenge = { challengeId ->
+                viewModel.completeChallenge(challengeId)
+            },
+            onClickChallenge = {}
+        )
+    }
 }
 
 @Composable
 fun DreamsScreen(
     dreams: List<Dream>,
     challenges: List<ChallengeCardData>,
+    modifier: Modifier = Modifier,
     onClickAddDream: () -> Unit = {},
     onClickTag: (String) -> Unit = {},
     onClickDream: (dreamId: String) -> Unit = {},
     onClickCompleteChallenge: (challengeId: String) -> Unit = {},
     onClickChallenge: (challengeId: String) -> Unit = {}
 ) {
-    var tab by remember { mutableStateOf(Challenges) }
+    var tab by remember { mutableStateOf(Dreams) }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
             .background(MaterialTheme.colors.background)
     ) {
         Row(
@@ -118,7 +126,7 @@ fun DreamsScreen(
 @Composable
 fun DreamsScreenPreview() {
     GameOfLifeTheme {
-        DreamsScreen(emptyList(), emptyList())
+        DreamsScreen(emptyList(), emptyList(), modifier = Modifier.fillMaxSize())
     }
 }
 

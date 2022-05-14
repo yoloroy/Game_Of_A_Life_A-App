@@ -23,6 +23,8 @@ import com.yoloroy.gameoflife.R
 import com.yoloroy.gameoflife.domain.model.Dream
 import com.yoloroy.gameoflife.domain.model.Profile
 import com.yoloroy.gameoflife.domain.model.Skill
+import com.yoloroy.gameoflife.presentation.components.BottomNavigationScreen
+import com.yoloroy.gameoflife.presentation.components.WithMainNavigationBar
 import com.yoloroy.gameoflife.presentation.ui.icons.ExpandToggle
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 import com.yoloroy.gameoflife.presentation.ui.theme.text
@@ -30,20 +32,27 @@ import com.yoloroy.gameoflife.presentation.util.Screen
 
 @Composable
 fun ProfileScreen(navController: NavController, viewModel: ProfileViewModel = hiltViewModel()) {
-    ProfileScreen(
-        profile = viewModel.profile,
-        onClickSettings = { navController.navigate(Screen.SettingsListScreen.route) },
-        onClickDream = { (id) -> navController.navigate(Screen.DreamsDetailsScreen.route + "/$id") }
-    )
+    WithMainNavigationBar(
+        currentScreen = BottomNavigationScreen(Screen.ProfileScreen),
+        navController = navController
+    ) {
+        ProfileScreen(
+            profile = viewModel.profile,
+            modifier = Modifier.weight(1f),
+            onClickSettings = { navController.navigate(Screen.SettingsListScreen.route) },
+            onClickDream = { (id) -> navController.navigate(Screen.DreamsDetailsScreen.route + "/$id") }
+        )
+    }
 }
 
 @Composable
-fun ProfileScreen(profile: Profile, onClickSettings: () -> Unit = {}, onClickDream: (Dream) -> Unit = {}) {
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxHeight()
-    ) {
+fun ProfileScreen(
+    profile: Profile,
+    modifier: Modifier = Modifier,
+    onClickSettings: () -> Unit = {},
+    onClickDream: (Dream) -> Unit = {}
+) {
+    Column(modifier = modifier.padding(16.dp)) {
         ToolBar(onClickSettings)
         MainInfo(profile.imageUrl, profile.name, profile.level, profile.exp, profile.maxExp)
         Spacer(modifier = Modifier.height(24.dp))
@@ -190,7 +199,8 @@ fun ProfileScreenPreview() {
                     fulfilledDreams = listOf(
                         Dream("-1", "Your first fulfilled dream", "...", emptyList())
                     )
-                )
+                ),
+                modifier = Modifier.fillMaxSize()
             )
         }
     }
