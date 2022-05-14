@@ -2,7 +2,7 @@
 #### android app
 
 ## Features
-* (There are only previews right now)
+* launch app via android studio and walk through the screens
 
 ## Previews
 * [Plan in Figma](https://www.figma.com/file/3oYtBAYxy87ygVQgWhH42h/GOAL-(fine)?node-id=0%3A1)
