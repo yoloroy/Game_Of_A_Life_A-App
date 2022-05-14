@@ -18,15 +18,36 @@ import androidx.compose.ui.unit.dp
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 import com.yoloroy.gameoflife.presentation.ui.theme.disabled
 import com.yoloroy.gameoflife.presentation.ui.theme.text
+import com.yoloroy.gameoflife.util.infiniteIterator
+import com.yoloroy.gameoflife.util.typingSymbolBySymbolFrames
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlin.time.Duration.Companion.seconds
+
+private val placeholderElements = listOf("cooking", "programming", "math", "sport", "self esteem")
+private val placeholderFrames = placeholderElements
+    .flatMap { listOf("") +
+            "...".typingSymbolBySymbolFrames +
+            "...".typingSymbolBySymbolFrames +
+            it.typingSymbolBySymbolFrames
+    }
+    .infiniteIterator()
+
 
 @Composable
-internal fun TagField(
+fun TagField(
     value: String,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
     onAddTag: (String) -> Unit = {}
 ) {
-    val placeholderText = remember { listOf("cooking", "programming", "math", "sport", "self esteem").random() } // TODO refactor
+    val placeholderFramesFlow = flow {
+        for (frame in placeholderFrames) {
+            emit(frame)
+            delay(0.5.seconds)
+        }
+    }
+    val placeholderText by placeholderFramesFlow.collectAsState(initial = "")
 
     Row(
         modifier = modifier
