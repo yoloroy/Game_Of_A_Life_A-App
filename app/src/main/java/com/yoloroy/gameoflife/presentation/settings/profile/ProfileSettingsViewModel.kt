@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.repository.ProfileSettingsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileSettingsViewModel(val repository: ProfileSettingsRepository) : ViewModel() {
+@HiltViewModel
+class ProfileSettingsViewModel @Inject constructor(val repository: ProfileSettingsRepository) : ViewModel() {
 
     var username by mutableStateOf("")
     var email by mutableStateOf("")
