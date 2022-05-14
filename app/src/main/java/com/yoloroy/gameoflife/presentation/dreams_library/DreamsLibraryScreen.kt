@@ -64,7 +64,7 @@ fun DreamsLibraryScreen(
     val backdropState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
     var isConcealed by remember { mutableStateOf(backdropState.isConcealed) }
 
-    LaunchedEffect(backdropState) {
+    LaunchedEffect(isConcealed) {
         if (isConcealed) {
             backdropState.reveal()
         } else {
@@ -92,6 +92,17 @@ private fun DreamsLayer(
     onClickTag: (String) -> Unit,
     onClickDream: (id: String) -> Unit
 ) {
+    val topText = when (dreams) {
+        is Resource.Success -> "See ${dreams.data!!.size} results"
+        is Resource.Loading -> "Loading results.."
+        is Resource.Error -> ":(" /*TODO*/
+    }
+    Text(
+        text = topText,
+        modifier = Modifier.padding(20.dp),
+        style = MaterialTheme.typography.subtitle2
+    )
+
     LazyColumn(
         contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -109,13 +120,6 @@ private fun LazyListScope.dreamsSuccessResult(
     onClickTag: (String) -> Unit,
     onClickDream: (id: String) -> Unit
 ) {
-    item {
-        Text(
-            text = "See ${dreams.size} results",
-            modifier = Modifier.padding(8.dp),
-            style = MaterialTheme.typography.subtitle2
-        )
-    }
     items(dreams) { dream ->
         GoalCard(
             title = dream.name,
@@ -130,7 +134,6 @@ private fun LazyListScope.dreamsSuccessResult(
 
 private fun LazyListScope.dreamsLoadingResult() {
     item {
-        Text(text = "Loading results..")
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -143,9 +146,7 @@ private fun LazyListScope.dreamsLoadingResult() {
 }
 
 private fun LazyListScope.dreamsErrorResult() {
-    item {
-        Text(text = ":(") // TODO
-    }
+    item {}
 }
 
 @Composable
