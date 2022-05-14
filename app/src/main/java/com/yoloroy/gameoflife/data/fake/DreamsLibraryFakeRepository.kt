@@ -22,7 +22,7 @@ object DreamsLibraryFakeRepository : DreamsLibraryRepository {
     override suspend fun getDreamsByTags(tags: Collection<String>): Flow<Resource<List<Dream>>> {
         return flow {
             emit(Resource.Loading())
-            delay((0.1).seconds)
+            delay(1.seconds)
             emit(Resource.Success(
                 FAKE_DREAMS.filter { it.tags.intersect(tags.toSet()).isNotEmpty() }
             ))

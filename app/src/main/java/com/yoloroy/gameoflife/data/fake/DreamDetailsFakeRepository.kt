@@ -5,7 +5,12 @@ import com.yoloroy.gameoflife.domain.model.Challenge
 import com.yoloroy.gameoflife.domain.model.DreamDetail
 import com.yoloroy.gameoflife.domain.model.Skill
 import com.yoloroy.gameoflife.domain.repository.DreamDetailsRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlin.random.Random
+import kotlin.time.Duration.Companion.seconds
 
 object DreamDetailsFakeRepository : DreamDetailsRepository {
     private const val FAKE_DREAMS_SIZE = 10
@@ -26,21 +31,31 @@ object DreamDetailsFakeRepository : DreamDetailsRepository {
                 )
             },
         )
+    }.associateBy { it.id }
+
+    private var isSubscribedOnDream = MutableStateFlow(Random.nextBoolean())
+
+    override fun getDreamById(id: String): Flow<Resource<DreamDetail>> = flow {
+        emit(Resource.Loading())
+        delay(0.5.seconds)
+
+        val result = FAKE_DREAMS[id]
+            ?.let { Resource.Success(it) }
+            ?:run { Resource.Error(NoSuchElementException()) }
+        emit(result)
     }
 
-    override fun getDreamById(id: String): Flow<Resource<DreamDetail>> {
-        TODO("Not yet implemented")
+    override fun getIsSubscribedOnDream(dreamId: String): Flow<Boolean> = isSubscribedOnDream
+
+    override fun removeDream(dreamId: String): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading())
+        isSubscribedOnDream.emit(false)
+        emit(Resource.Success(Unit))
     }
 
-    override fun getIsSubscribedOnDream(dreamId: String): Flow<Boolean> {
-        TODO("Not yet implemented")
-    }
-
-    override fun removeDream(dreamId: String): Flow<Resource<Unit>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun addDream(dreamId: String): Flow<Resource<Unit>> {
-        TODO("Not yet implemented")
+    override fun addDream(dreamId: String): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading())
+        isSubscribedOnDream.emit(true)
+        emit(Resource.Success(Unit))
     }
 }
