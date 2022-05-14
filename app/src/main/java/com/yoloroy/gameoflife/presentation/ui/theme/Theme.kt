@@ -6,6 +6,7 @@ import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.runtime.Composable
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val ColorPalette = darkColors(
     primary = YellowAccent,
@@ -31,7 +32,12 @@ fun GameOfLifeTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colors = ColorPalette,
         typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
+        shapes = Shapes
+    ) {
+        rememberSystemUiController().apply {
+            setSystemBarsColor(color = MaterialTheme.colors.background)
+        }
+
+        content()
+    }
 }
