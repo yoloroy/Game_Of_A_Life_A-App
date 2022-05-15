@@ -2,8 +2,8 @@ package com.yoloroy.gameoflife.presentation.dreams_library
 
 import androidx.lifecycle.*
 import com.yoloroy.gameoflife.common.Resource
+import com.yoloroy.gameoflife.domain.bad_repository.DreamsLibraryRepository
 import com.yoloroy.gameoflife.domain.model.Dream
-import com.yoloroy.gameoflife.domain.repository.DreamsLibraryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

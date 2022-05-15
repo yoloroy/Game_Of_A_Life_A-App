@@ -1,6 +1,6 @@
 package com.yoloroy.gameoflife.data.fake
 
-import com.yoloroy.gameoflife.domain.repository.LoginRepository
+import com.yoloroy.gameoflife.domain.bad_repository.LoginRepository
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 

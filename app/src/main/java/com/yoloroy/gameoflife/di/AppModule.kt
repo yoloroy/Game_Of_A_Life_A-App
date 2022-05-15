@@ -1,7 +1,7 @@
 package com.yoloroy.gameoflife.di
 
 import com.yoloroy.gameoflife.data.fake.*
-import com.yoloroy.gameoflife.domain.repository.*
+import com.yoloroy.gameoflife.domain.bad_repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

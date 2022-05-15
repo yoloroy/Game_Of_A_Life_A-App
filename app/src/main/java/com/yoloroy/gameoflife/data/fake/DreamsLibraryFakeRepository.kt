@@ -1,8 +1,8 @@
 package com.yoloroy.gameoflife.data.fake
 
 import com.yoloroy.gameoflife.common.Resource
+import com.yoloroy.gameoflife.domain.bad_repository.DreamsLibraryRepository
 import com.yoloroy.gameoflife.domain.model.Dream
-import com.yoloroy.gameoflife.domain.repository.DreamsLibraryRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

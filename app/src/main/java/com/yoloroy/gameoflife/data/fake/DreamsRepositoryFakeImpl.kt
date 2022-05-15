@@ -1,10 +1,10 @@
 package com.yoloroy.gameoflife.data.fake
 
+import com.yoloroy.gameoflife.domain.bad_repository.DreamsRepository
 import com.yoloroy.gameoflife.domain.model.Challenge
 import com.yoloroy.gameoflife.domain.model.ChallengeWithDreamInfo
 import com.yoloroy.gameoflife.domain.model.Dream
 import com.yoloroy.gameoflife.domain.model.DreamDetail
-import com.yoloroy.gameoflife.domain.repository.DreamsRepository
 
 object DreamsRepositoryFakeImpl : DreamsRepository {
     private val dreams = mutableListOf(

@@ -1,6 +1,6 @@
 package com.yoloroy.gameoflife.data.fake
 
-import com.yoloroy.gameoflife.domain.repository.RegistrationRepository
+import com.yoloroy.gameoflife.domain.bad_repository.RegistrationRepository
 
 object RegistrationRepositoryFakeImpl : RegistrationRepository {
 

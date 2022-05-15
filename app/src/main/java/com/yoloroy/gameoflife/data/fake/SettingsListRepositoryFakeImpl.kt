@@ -1,7 +1,7 @@
 package com.yoloroy.gameoflife.data.fake
 
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.domain.repository.SettingsListRepository
+import com.yoloroy.gameoflife.domain.bad_repository.SettingsListRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlin.time.Duration.Companion.seconds

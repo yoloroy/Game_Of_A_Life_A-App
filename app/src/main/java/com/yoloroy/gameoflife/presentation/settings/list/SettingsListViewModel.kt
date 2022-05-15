@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.domain.repository.SettingsListRepository
+import com.yoloroy.gameoflife.domain.bad_repository.SettingsListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
