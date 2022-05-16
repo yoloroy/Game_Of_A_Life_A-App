@@ -1,10 +1,10 @@
-package com.yoloroy.gameoflife.data.fake
+package com.yoloroy.gameoflife.data.bad_fake
 
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.bad_repository.DreamDetailsRepository
-import com.yoloroy.gameoflife.domain.model.Challenge
-import com.yoloroy.gameoflife.domain.model.DreamDetail
-import com.yoloroy.gameoflife.domain.model.Skill
+import com.yoloroy.gameoflife.domain.model.data.Challenge
+import com.yoloroy.gameoflife.domain.model.data.DreamDetail
+import com.yoloroy.gameoflife.domain.model.data.Skill
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

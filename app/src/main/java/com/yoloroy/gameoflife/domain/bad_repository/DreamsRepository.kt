@@ -1,7 +1,7 @@
 package com.yoloroy.gameoflife.domain.bad_repository
 
-import com.yoloroy.gameoflife.domain.model.ChallengeWithDreamInfo
-import com.yoloroy.gameoflife.domain.model.Dream
+import com.yoloroy.gameoflife.domain.model.data.ChallengeWithDreamInfo
+import com.yoloroy.gameoflife.domain.model.data.Dream
 
 interface DreamsRepository {
 

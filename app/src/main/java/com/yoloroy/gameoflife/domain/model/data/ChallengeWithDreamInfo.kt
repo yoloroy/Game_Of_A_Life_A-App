@@ -1,4 +1,4 @@
-package com.yoloroy.gameoflife.domain.model
+package com.yoloroy.gameoflife.domain.model.data
 
 data class ChallengeWithDreamInfo(
     val id: String,

@@ -20,9 +20,9 @@ import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowRow
 import com.skydoves.landscapist.glide.GlideImage
 import com.yoloroy.gameoflife.R
-import com.yoloroy.gameoflife.domain.model.Dream
-import com.yoloroy.gameoflife.domain.model.Profile
-import com.yoloroy.gameoflife.domain.model.Skill
+import com.yoloroy.gameoflife.domain.model.data.Dream
+import com.yoloroy.gameoflife.domain.model.data.Profile
+import com.yoloroy.gameoflife.domain.model.data.Skill
 import com.yoloroy.gameoflife.presentation.components.BottomNavigationScreen
 import com.yoloroy.gameoflife.presentation.components.WithMainNavigationBar
 import com.yoloroy.gameoflife.presentation.ui.icons.ExpandToggle

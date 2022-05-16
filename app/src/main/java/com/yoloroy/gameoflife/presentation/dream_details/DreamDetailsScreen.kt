@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.domain.model.Challenge
-import com.yoloroy.gameoflife.domain.model.DreamDetail
-import com.yoloroy.gameoflife.domain.model.Skill
+import com.yoloroy.gameoflife.domain.model.data.Challenge
+import com.yoloroy.gameoflife.domain.model.data.DreamDetail
+import com.yoloroy.gameoflife.domain.model.data.Skill
 import com.yoloroy.gameoflife.presentation.components.GoalCard
 import com.yoloroy.gameoflife.presentation.components.GoalTag
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme

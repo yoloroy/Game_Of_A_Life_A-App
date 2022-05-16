@@ -1,9 +1,9 @@
-package com.yoloroy.gameoflife.data.fake
+package com.yoloroy.gameoflife.data.bad_fake
 
 import com.yoloroy.gameoflife.domain.bad_repository.ProfileRepository
-import com.yoloroy.gameoflife.domain.model.Dream
-import com.yoloroy.gameoflife.domain.model.Profile
-import com.yoloroy.gameoflife.domain.model.Skill
+import com.yoloroy.gameoflife.domain.model.data.Dream
+import com.yoloroy.gameoflife.domain.model.data.Profile
+import com.yoloroy.gameoflife.domain.model.data.Skill
 
 object ProfileRepositoryFakeImpl : ProfileRepository {
     override val profile get() = Profile(

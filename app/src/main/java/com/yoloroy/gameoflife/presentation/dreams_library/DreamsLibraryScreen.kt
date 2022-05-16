@@ -24,7 +24,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.domain.model.Dream
+import com.yoloroy.gameoflife.domain.model.data.Dream
 import com.yoloroy.gameoflife.presentation.components.GoalCard
 import com.yoloroy.gameoflife.presentation.components.GoalTag
 import com.yoloroy.gameoflife.presentation.ui.icons.ToggleIcon

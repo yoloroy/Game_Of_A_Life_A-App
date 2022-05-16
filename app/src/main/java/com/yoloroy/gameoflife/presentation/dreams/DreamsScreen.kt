@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.yoloroy.gameoflife.domain.model.Dream
+import com.yoloroy.gameoflife.domain.model.data.Dream
 import com.yoloroy.gameoflife.presentation.components.BottomNavigationScreen
 import com.yoloroy.gameoflife.presentation.components.GoalTab
 import com.yoloroy.gameoflife.presentation.components.WithMainNavigationBar

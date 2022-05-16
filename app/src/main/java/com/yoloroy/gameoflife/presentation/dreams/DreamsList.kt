@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.yoloroy.gameoflife.domain.model.Dream
+import com.yoloroy.gameoflife.domain.model.data.Dream
 import com.yoloroy.gameoflife.presentation.components.GoalCard
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 

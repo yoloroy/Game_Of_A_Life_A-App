@@ -15,9 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.yoloroy.gameoflife.domain.model.Dream
-import com.yoloroy.gameoflife.domain.model.Profile
-import com.yoloroy.gameoflife.domain.model.Skill
+import com.yoloroy.gameoflife.domain.model.data.Dream
+import com.yoloroy.gameoflife.domain.model.data.Profile
+import com.yoloroy.gameoflife.domain.model.data.Skill
 import com.yoloroy.gameoflife.presentation.components.ProfileImageWithExp
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
 import com.yoloroy.gameoflife.presentation.ui.theme.disabled

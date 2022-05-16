@@ -1,7 +1,7 @@
 package com.yoloroy.gameoflife.domain.bad_repository
 
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.domain.model.Dream
+import com.yoloroy.gameoflife.domain.model.data.Dream
 import kotlinx.coroutines.flow.Flow
 
 interface DreamsLibraryRepository {

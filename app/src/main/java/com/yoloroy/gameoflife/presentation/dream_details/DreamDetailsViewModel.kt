@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.bad_repository.DreamDetailsRepository
-import com.yoloroy.gameoflife.domain.model.DreamDetail
+import com.yoloroy.gameoflife.domain.model.data.DreamDetail
 import com.yoloroy.gameoflife.presentation.dream_details.DreamDetailsMode.Adding
 import com.yoloroy.gameoflife.presentation.dream_details.DreamDetailsMode.Removing
 import dagger.hilt.android.lifecycle.HiltViewModel

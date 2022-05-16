@@ -1,4 +1,4 @@
-package com.yoloroy.gameoflife.data.fake
+package com.yoloroy.gameoflife.data.bad_fake
 
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.bad_repository.ProfileSettingsRepository
