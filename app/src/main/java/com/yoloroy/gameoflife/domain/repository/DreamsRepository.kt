@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface DreamsRepository {
 
-    fun getDreamsByTags(tags: List<String>): Flow<Resource<Dream>>
+    fun getDreamsByTags(tags: List<String>): Flow<Resource<List<Dream>>>
 
     fun getDreamDetail(dreamId: String): Flow<Resource<DreamDetail>>
 }

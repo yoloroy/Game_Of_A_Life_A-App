@@ -8,4 +8,14 @@ data class Profile(
     val maxExp: Int,
     val skills: List<Skill> = emptyList(),
     val fulfilledDreams: List<Dream> = emptyList()
-)
+) {
+    constructor(details: ProfileDetails) : this(
+        details.imageUrl,
+        details.name,
+        details.level,
+        details.exp,
+        details.maxExp,
+        details.skills,
+        details.fulfilledDreams
+    )
+}
