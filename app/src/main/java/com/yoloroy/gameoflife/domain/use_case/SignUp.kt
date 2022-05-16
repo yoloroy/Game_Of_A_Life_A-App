@@ -1,0 +1,12 @@
+package com.yoloroy.gameoflife.domain.use_case
+
+import com.yoloroy.gameoflife.domain.repository.AuthRepository
+
+class SignUp(val repository: AuthRepository) {
+    operator fun invoke(
+        username: String,
+        email: String,
+        password: String,
+        passwordConfirmation: String
+    ) = repository.signUp(username, email, password, passwordConfirmation)
+}

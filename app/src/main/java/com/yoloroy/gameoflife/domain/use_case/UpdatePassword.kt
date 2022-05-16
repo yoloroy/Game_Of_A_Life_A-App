@@ -1,0 +1,11 @@
+package com.yoloroy.gameoflife.domain.use_case
+
+import com.yoloroy.gameoflife.domain.repository.AuthRepository
+
+class UpdatePassword(val repository: AuthRepository) {
+    operator fun invoke(
+        oldPassword: String,
+        newPassword: String,
+        newPasswordConfirmation: String
+    ) = repository.updatePassword(oldPassword, newPassword, newPasswordConfirmation)
+}
