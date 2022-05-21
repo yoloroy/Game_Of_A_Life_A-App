@@ -1,8 +1,9 @@
 package com.yoloroy.gameoflife.domain.use_case
 
 import com.yoloroy.gameoflife.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class UpdatePassword(val repository: AuthRepository) {
+class UpdatePassword @Inject constructor(val repository: AuthRepository) {
     operator fun invoke(
         oldPassword: String,
         newPassword: String,

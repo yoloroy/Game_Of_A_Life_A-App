@@ -1,7 +1,8 @@
 package com.yoloroy.gameoflife.domain.use_case
 
 import com.yoloroy.gameoflife.domain.repository.ActivityRepository
+import javax.inject.Inject
 
-class CompleteChallenge(val repository: ActivityRepository) {
+class CompleteChallenge @Inject constructor(val repository: ActivityRepository) {
     operator fun invoke(challengeId: String) = repository.completeChallenge(challengeId)
 }

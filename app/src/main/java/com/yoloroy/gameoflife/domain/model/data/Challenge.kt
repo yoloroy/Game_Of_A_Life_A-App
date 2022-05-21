@@ -7,3 +7,7 @@ data class Challenge(
     val no: Int,
     val skills: List<Skill> = emptyList()
 )
+
+fun Challenge.withDreamInfo(dream: Dream) = ChallengeWithDreamInfo(this, dream)
+
+fun Challenge.withDreamInfo(dream: DreamDetail) = withDreamInfo(Dream(dream))
