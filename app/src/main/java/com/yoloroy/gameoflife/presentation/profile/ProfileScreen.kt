@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowRow
 import com.skydoves.landscapist.glide.GlideImage
 import com.yoloroy.gameoflife.R
+import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.data.Dream
 import com.yoloroy.gameoflife.domain.model.data.Profile
 import com.yoloroy.gameoflife.domain.model.data.Skill
@@ -36,12 +37,16 @@ fun ProfileScreen(navController: NavController, viewModel: ProfileViewModel = hi
         currentScreen = BottomNavigationScreen(Screen.ProfileScreen),
         navController = navController
     ) {
-        ProfileScreen(
-            profile = viewModel.profile,
-            modifier = Modifier.weight(1f),
-            onClickSettings = { navController.navigate(Screen.SettingsListScreen.route) },
-            onClickDream = { (id) -> navController.navigate(Screen.DreamsDetailsScreen.route + "/$id") }
-        )
+        when (viewModel.profile) {
+            is Resource.Success -> ProfileScreen(
+                profile = viewModel.profile.data!!,
+                modifier = Modifier.weight(1f),
+                onClickSettings = { navController.navigate(Screen.SettingsListScreen.route) },
+                onClickDream = { (id) -> navController.navigate(Screen.DreamsDetailsScreen.route + "/$id") }
+            )
+            is Resource.Error -> ErrorContent(error = viewModel.profile.error!!)
+            is Resource.Loading -> LoadingContent()
+        }
     }
 }
 
@@ -173,6 +178,21 @@ private fun FulfilledDreams(dreams: List<Dream>, onClickDream: (Dream) -> Unit) 
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ErrorContent(error: Throwable) {
+    // TODO
+}
+
+@Composable
+private fun LoadingContent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
     }
 }
 

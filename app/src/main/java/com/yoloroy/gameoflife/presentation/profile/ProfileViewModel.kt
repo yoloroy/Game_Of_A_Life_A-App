@@ -2,13 +2,27 @@ package com.yoloroy.gameoflife.presentation.profile
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.yoloroy.gameoflife.domain.bad_repository.ProfileRepository
+import androidx.lifecycle.viewModelScope
+import com.yoloroy.gameoflife.common.Resource
+import com.yoloroy.gameoflife.domain.model.data.Profile
+import com.yoloroy.gameoflife.domain.use_case.GetProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(val repository: ProfileRepository) : ViewModel() {
+class ProfileViewModel @Inject constructor(val getProfile: GetProfile) : ViewModel() {
 
-    val profile by mutableStateOf(repository.profile)
+    var profile: Resource<Profile> by mutableStateOf(Resource.Loading())
+        private set
+
+    init {
+        viewModelScope.launch {
+            getProfile().collect {
+                profile = it
+            }
+        }
+    }
 }
