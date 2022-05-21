@@ -2,15 +2,15 @@ package com.yoloroy.gameoflife.presentation.dreams_library
 
 import androidx.lifecycle.*
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.domain.bad_repository.DreamsLibraryRepository
 import com.yoloroy.gameoflife.domain.model.data.Dream
+import com.yoloroy.gameoflife.domain.use_case.GetDreamsByTags
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DreamsLibraryViewModel @Inject constructor(
-    private val repository: DreamsLibraryRepository,
+    private val getDreamsByTags: GetDreamsByTags,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -32,8 +32,7 @@ class DreamsLibraryViewModel @Inject constructor(
 
     private val tagsObserver = Observer<Set<String>> { tags ->
         viewModelScope.launch {
-            repository
-                .getDreamsByTags(tags!!)
+            getDreamsByTags(tags!!.toList())
                 .collect { _dreams.value = it }
         }
     }
