@@ -5,12 +5,11 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yoloroy.gameoflife.domain.bad_repository.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel @Inject constructor() : ViewModel() {
 
     private val _emailOrLogin: MutableLiveData<String> = MutableLiveData("")
     val emailOrLogin: LiveData<String> = _emailOrLogin
