@@ -3,16 +3,20 @@ package com.yoloroy.gameoflife.presentation.dreams
 import androidx.lifecycle.*
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.common.transform
-import com.yoloroy.gameoflife.domain.bad_repository.DreamsRepository
 import com.yoloroy.gameoflife.domain.model.data.ChallengeWithDreamInfo
 import com.yoloroy.gameoflife.domain.model.data.Dream
+import com.yoloroy.gameoflife.domain.use_case.CompleteChallenge
+import com.yoloroy.gameoflife.domain.use_case.GetCurrentChallengesWithDreamInfo
+import com.yoloroy.gameoflife.domain.use_case.GetCurrentDreams
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DreamsViewModel @Inject constructor(
-    private val dreamsRepository: DreamsRepository
+    private val completeChallenge: CompleteChallenge,
+    private val getCurrentDreams: GetCurrentDreams,
+    private val getCurrentChallengesWithDreamInfo: GetCurrentChallengesWithDreamInfo
 ) : ViewModel() {
 
     private var _dreams: MutableLiveData<Resource<List<Dream>>> =
@@ -26,22 +30,18 @@ class DreamsViewModel @Inject constructor(
     fun completeChallenge(challengeId: String) {
         val dreamId = _challenges.value?.data?.find { it.id == challengeId }?.dreamId!!
 
-        dreamsRepository.completeChallenge(dreamId)
+        completeChallenge.invoke(dreamId)
     }
 
     init {
         viewModelScope.launch {
-            _dreams.value = try {
-                Resource.Success(dreamsRepository.getDreams())
-            } catch (e: Exception) { // TODO
-                Resource.Error(e)
+            getCurrentDreams().collect {
+                _dreams.value = it
             }
         }
         viewModelScope.launch {
-            _challenges.value = try {
-                Resource.Success(dreamsRepository.getCurrentChallenges())
-            } catch (e: Exception) { // TODO
-                Resource.Error(e)
+            getCurrentChallengesWithDreamInfo().collect {
+                _challenges.value = it
             }
         }
     }
@@ -50,7 +50,7 @@ class DreamsViewModel @Inject constructor(
 private fun LiveData<Resource<List<ChallengeWithDreamInfo>>>.toCardData() = Transformations
     .map(this) { resource ->
         resource.transform { list ->
-            list.map(ChallengeWithDreamInfo::toCardData)
+            list.map { it.toCardData() }
         }
     }
 
