@@ -6,14 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.domain.bad_repository.ProfileSettingsRepository
+import com.yoloroy.gameoflife.domain.model.data.Profile
+import com.yoloroy.gameoflife.domain.use_case.GetProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileSettingsViewModel @Inject constructor(val repository: ProfileSettingsRepository) : ViewModel() {
+class ProfileSettingsViewModel @Inject constructor(
+    private val getProfile: GetProfile
+) : ViewModel() {
 
     var username by mutableStateOf("")
     var email by mutableStateOf("")
@@ -23,26 +27,16 @@ class ProfileSettingsViewModel @Inject constructor(val repository: ProfileSettin
 
     init {
         viewModelScope.launch {
-            username = repository.getInitialUsername()
+            getProfile()
+                .filterIsInstance<Resource.Success<Profile>>()
+                .map { it.data!! }
+                .collect {
+                    username = it.name
+                }
         }
     }
 
-    private var confirmationJob: Job? = null
     fun confirmChanges(onSuccess: () -> Unit) {
-        viewModelScope
-            .launch {
-                repository.confirmChanges().collect {
-                    when (it) {
-                        is Resource.Success -> onSuccess() // TODO result enum
-                        else -> TODO()
-                    }
-                }
-            }
-            .apply {
-                invokeOnCompletion {
-                    confirmationJob = null
-                }
-                confirmationJob = this
-            }
+        // TODO
     }
 }
