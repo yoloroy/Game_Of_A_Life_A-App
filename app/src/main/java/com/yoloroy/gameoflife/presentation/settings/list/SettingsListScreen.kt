@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.data.Dream
 import com.yoloroy.gameoflife.domain.model.data.Profile
 import com.yoloroy.gameoflife.domain.model.data.Skill
@@ -48,7 +49,7 @@ fun SettingsListScreen(navController: NavController, viewModel: SettingsListView
 @ExperimentalMaterialApi
 @Composable
 fun SettingsListScreen(
-    profile: Profile,
+    profile: Resource<Profile>,
     onClickBack: () -> Unit = {},
     onClickProfileSettings: () -> Unit = {},
     onClickResetStats: () -> Unit = {},
@@ -86,7 +87,7 @@ fun SettingsListScreen(
 }
 
 @Composable
-private fun ActionBar(profile: Profile, onClickBack: () -> Unit) {
+private fun ActionBar(profile: Resource<Profile>, onClickBack: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -122,7 +123,16 @@ private fun ActionBar(profile: Profile, onClickBack: () -> Unit) {
 }
 
 @Composable
-private fun ProfileInfo(profile: Profile, modifier: Modifier = Modifier) {
+private fun ProfileInfo(profile: Resource<Profile>, modifier: Modifier = Modifier) {
+    when (profile) {
+        is Resource.Success -> ProfileInfoContent(profile.data!!, modifier)
+        is Resource.Error -> ProfileInfoError(profile.error!!, modifier)
+        is Resource.Loading -> ProfileInfoLoading(modifier)
+    }
+}
+
+@Composable
+private fun ProfileInfoContent(profile: Profile, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .padding(
@@ -158,6 +168,29 @@ private fun ProfileInfo(profile: Profile, modifier: Modifier = Modifier) {
             )
         }
     }
+}
+
+@Composable
+private fun ProfileInfoLoading(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .padding(
+                top = 8.dp,
+                bottom = 16.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun ProfileInfoError(error: Throwable, modifier: Modifier = Modifier) {
+    // TODO
+    ProfileInfoLoading(modifier = modifier)
 }
 
 @ExperimentalMaterialApi
@@ -236,22 +269,23 @@ private fun Content(
 fun SettingsListScreenPreview() {
     GameOfLifeTheme {
         SettingsListScreen(
-            profile = Profile(
-                name = "AndroidDancer",
-                level = 3,
-                exp = 83,
-                maxExp = 128,
-                skills = listOf(
-                    Skill(name = "Android", level = 11),
-                    Skill(name = "Planning", level = 8),
-                    Skill(name = "Design", level = 6),
-                    Skill(name = "Intelligence", level = 6),
-                    Skill(name = "Endurance", level = 5)
-                ),
-                fulfilledDreams = listOf(
-                    Dream("-1", "Your first fulfilled dream", "...", emptyList())
-                )
-            )
+            profile = Resource.Success(
+                Profile(
+                    name = "AndroidDancer",
+                    level = 3,
+                    exp = 83,
+                    maxExp = 128,
+                    skills = listOf(
+                        Skill(name = "Android", level = 11),
+                        Skill(name = "Planning", level = 8),
+                        Skill(name = "Design", level = 6),
+                        Skill(name = "Intelligence", level = 6),
+                        Skill(name = "Endurance", level = 5)
+                    ),
+                    fulfilledDreams = listOf(
+                        Dream("-1", "Your first fulfilled dream", "...", emptyList())
+                    )
+                ))
         )
     }
 }
