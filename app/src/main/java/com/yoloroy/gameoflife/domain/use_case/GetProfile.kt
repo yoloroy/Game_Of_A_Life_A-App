@@ -8,7 +8,7 @@ import com.yoloroy.gameoflife.domain.repository.ProfileRepository
 import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
-class GetProfile @Inject constructor(val repository: ProfileRepository) {
+class GetProfile @Inject constructor(private val repository: ProfileRepository) {
     operator fun invoke() = repository.profileDetails
         .transform<Resource<ProfileDetails>, Resource<Profile>> { res -> res.transform { Profile(it) } }
 }

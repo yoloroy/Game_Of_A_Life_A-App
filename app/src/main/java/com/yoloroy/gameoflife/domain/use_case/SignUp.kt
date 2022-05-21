@@ -3,7 +3,7 @@ package com.yoloroy.gameoflife.domain.use_case
 import com.yoloroy.gameoflife.domain.repository.AuthRepository
 import javax.inject.Inject
 
-class SignUp @Inject constructor(val repository: AuthRepository) {
+class SignUp @Inject constructor(private val repository: AuthRepository) {
     operator fun invoke(
         username: String,
         email: String,
