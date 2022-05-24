@@ -45,12 +45,8 @@ class MainActivity : ComponentActivity() {
             GameOfLifeTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     when (isLogin) {
-                        Resource.Success(true) -> {
-                            val startDestination = if (isLogin.data!!)
-                                Screen.DreamsScreen.route else
-                                Screen.LoginScreen.route
-
-                            Navigation(navController, startDestination)
+                        is Resource.Success -> {
+                            Navigation(navController, Screen.DreamsScreen.route)
                         }
                         is Resource.Loading -> {
                             Box(
@@ -69,7 +65,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
-                        else -> TODO()
+                        else -> {}
                     }
                 }
             }

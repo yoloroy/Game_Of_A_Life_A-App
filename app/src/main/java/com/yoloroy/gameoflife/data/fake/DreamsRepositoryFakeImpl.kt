@@ -14,9 +14,11 @@ object DreamsRepositoryFakeImpl : DreamsRepository {
     override fun getDreamsByTags(tags: List<String>): Flow<Resource<List<Dream>>> = flow {
         emit(Resource.Loading())
         delay(2.seconds)
+        val fixedTags = tags.map { it.lowercase() }
         emit(Resource.Success(
             FakeSource.dreams
-                .filter { dream -> dream.tags.any { it in tags } }
+                .filter { dream -> dream.tags.any { it.lowercase() in fixedTags } }
+                .sortedBy { dream -> dream.tags.intersect(fixedTags.toSet()).size }
                 .map { Dream(it) }
         ))
     }
