@@ -9,9 +9,9 @@ internal object FakeSource {
 
     var dreams: List<DreamDetail>
 
-    val profileDetailsFlow: MutableStateFlow<ProfileDetails>
+    val profileDetailsFlow by lazy { MutableStateFlow(getProfileDetails()) }
 
-    private val _ongoingDreamsIdsProgress = mutableListOf<DreamIdProgress>()
+    private val _ongoingDreamsIdsProgress by lazy { mutableListOf<DreamIdProgress>() }
     var ongoingDreamsIdsProgress: List<DreamIdProgress>
         get() = _ongoingDreamsIdsProgress
         set(value) {
@@ -87,8 +87,6 @@ internal object FakeSource {
             )
         }
         this.ongoingDreamsIdsProgress = ongoingDreamsIdsProgress
-
-        profileDetailsFlow = MutableStateFlow(getProfileDetails())
     }
 
     private fun getProfileDetails() = ProfileDetails(
