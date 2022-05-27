@@ -42,8 +42,8 @@ fun DreamsScreen(navController: NavController, viewModel: DreamsViewModel = hilt
             onClickAddDream = {
                 navController.navigate(Screen.DreamsLibraryScreen.route)
             },
-            onClickTag = {
-                navController.navigate("${Screen.DreamsLibraryScreen.route}?tag=$it")
+            onClickTag = { tag ->
+                navController.navigate(Screen.DreamsLibraryScreen.route(tag))
             },
             onClickDream = { dreamId ->
                 navController.navigate("${Screen.DreamsDetailsScreen.route}/$dreamId")

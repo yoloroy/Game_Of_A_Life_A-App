@@ -40,9 +40,8 @@ fun Navigation(
             "${Screen.DreamsLibraryScreen.route}?tags={tags}",
             arguments = listOf(
                 navArgument("tags") {
-                    type = NavType.StringArrayType
-                    nullable = true
-                    defaultValue = null
+                    type = NavType.StringType
+                    defaultValue = ""
                 }
             )
         ) {

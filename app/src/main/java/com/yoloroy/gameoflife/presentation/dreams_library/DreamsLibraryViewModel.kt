@@ -15,7 +15,10 @@ class DreamsLibraryViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _tags: MutableLiveData<Set<String>> = MutableLiveData(
-        savedStateHandle.get<Array<String>>("tags")?.toSet() ?: emptySet()
+        (savedStateHandle.get<String>("tags") ?: "")
+            .split(",")
+            .filter(String::isNotEmpty)
+            .toSet()
     )
     val tags: LiveData<Set<String>> = _tags
 
