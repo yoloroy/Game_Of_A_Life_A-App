@@ -5,18 +5,20 @@ import com.yoloroy.gameoflife.domain.model.data.ProfileDetails
 import com.yoloroy.gameoflife.domain.repository.ProfileRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlin.time.Duration.Companion.seconds
 
 object ProfileRepositoryFakeImpl : ProfileRepository {
 
-    override var profileDetails: Flow<Resource<ProfileDetails>> = flow {
-        emit(Resource.Loading())
-        FakeSource.profileDetailsFlow.collectLatest {
-            emit(Resource.Success(it))
+    override var profileDetails: Flow<Resource<ProfileDetails>> = FakeSource.profileDetailsFlow
+        .map<ProfileDetails, Resource<ProfileDetails>> { Resource.Success(it) }
+        .onStart {
+            emit(Resource.Loading())
+            delay(0.5.seconds)
+            emit(Resource.Success(FakeSource.profileDetailsFlow.value))
         }
-    }
 
     override fun resetStats(): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading())
