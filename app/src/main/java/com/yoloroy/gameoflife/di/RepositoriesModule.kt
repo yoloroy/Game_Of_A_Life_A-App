@@ -2,8 +2,9 @@ package com.yoloroy.gameoflife.di
 
 import com.yoloroy.gameoflife.data.fake.ActivityRepositoryFakeImpl
 import com.yoloroy.gameoflife.data.fake.AuthRepositoryFakeImpl
-import com.yoloroy.gameoflife.data.fake.DreamsRepositoryFakeImpl
 import com.yoloroy.gameoflife.data.fake.ProfileRepositoryFakeImpl
+import com.yoloroy.gameoflife.data.impl.DreamsRepositoryImpl
+import com.yoloroy.gameoflife.data.remote.DreamsRemoteSource
 import com.yoloroy.gameoflife.domain.repository.ActivityRepository
 import com.yoloroy.gameoflife.domain.repository.AuthRepository
 import com.yoloroy.gameoflife.domain.repository.DreamsRepository
@@ -15,7 +16,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object FakesReposModule {
+object RepositoriesModule {
 
     @Provides
     fun provideDreamDetailsRepository(): AuthRepository = AuthRepositoryFakeImpl
@@ -24,7 +25,7 @@ object FakesReposModule {
     fun provideDreamsLibraryRepository(): ActivityRepository = ActivityRepositoryFakeImpl
 
     @Provides
-    fun provideDreamsRepository(): DreamsRepository = DreamsRepositoryFakeImpl
+    fun provideDreamsRepository(dreamsRemoteSource: DreamsRemoteSource): DreamsRepository = DreamsRepositoryImpl(dreamsRemoteSource)
 
     @Provides
     fun provideProfileRepository(): ProfileRepository = ProfileRepositoryFakeImpl
