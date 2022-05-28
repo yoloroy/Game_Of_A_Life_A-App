@@ -1,6 +1,8 @@
 package com.yoloroy.gameoflife.data.fake
 
 import com.yoloroy.gameoflife.common.Resource
+import com.yoloroy.gameoflife.common.transform
+import com.yoloroy.gameoflife.domain.model.data.Profile
 import com.yoloroy.gameoflife.domain.model.data.ProfileDetails
 import com.yoloroy.gameoflife.domain.repository.ProfileRepository
 import kotlinx.coroutines.delay
@@ -12,13 +14,16 @@ import kotlin.time.Duration.Companion.seconds
 
 object ProfileRepositoryFakeImpl : ProfileRepository {
 
-    override var profileDetails: Flow<Resource<ProfileDetails>> = FakeSource.profileDetailsFlow
+    override val profileDetails: Flow<Resource<ProfileDetails>> = FakeSource.profileDetailsFlow
         .map<ProfileDetails, Resource<ProfileDetails>> { Resource.Success(it) }
         .onStart {
             emit(Resource.Loading())
             delay(0.5.seconds)
             emit(Resource.Success(FakeSource.profileDetailsFlow.value))
         }
+
+    override val profile: Flow<Resource<Profile>> = profileDetails
+        .map { res -> res.transform { Profile(it) } }
 
     override fun resetStats(): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading())
