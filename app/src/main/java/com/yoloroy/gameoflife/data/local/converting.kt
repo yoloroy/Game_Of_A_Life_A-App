@@ -4,11 +4,14 @@ import com.yoloroy.gameoflife.data.local.entity.*
 import com.yoloroy.gameoflife.domain.model.data.ChallengeWithDreamInfo
 import com.yoloroy.gameoflife.domain.model.data.DreamDetail
 import com.yoloroy.gameoflife.domain.model.data.DreamStatus
+import com.yoloroy.gameoflife.domain.model.data.ProfileDetails
 import com.yoloroy.gameoflife.data.local.entity.Challenge as ChallengeEntity
 import com.yoloroy.gameoflife.data.local.entity.Dream as DreamEntity
+import com.yoloroy.gameoflife.data.local.entity.Profile as ProfileEntity
 import com.yoloroy.gameoflife.data.local.entity.Skill as SkillEntity
 import com.yoloroy.gameoflife.domain.model.data.Challenge as DomainChallenge
 import com.yoloroy.gameoflife.domain.model.data.Dream as DomainDream
+import com.yoloroy.gameoflife.domain.model.data.Profile as DomainProfile
 import com.yoloroy.gameoflife.domain.model.data.Skill as DomainSkill
 
 fun DreamFull.toDreamDetail() = DreamDetail(
@@ -63,4 +66,33 @@ fun DreamProgress?.toDreamStatus(challengesCount: Int? = null): DreamStatus {
             else -> DreamStatus.InProcess(progress)
         }
     }
+}
+
+fun DomainProfile.toProfileEntity() = ProfileEntity(
+    ProfileEntity.Default.localProfileId,
+    imageUrl, name, level, exp, maxExp
+)
+
+fun ProfileEntity.toDomainProfile() = DomainProfile(imageUrl, name, level, exp, maxExp)
+
+fun ProfileFull.toProfileDetails(): ProfileDetails {
+    val profile = profile.toDomainProfile()
+    val skills = skills.map(SkillEntity::toDomainSkill)
+    val (fulfilledDreams, ongoingDreams) = dreamInfos
+        .map { it.dreamProgress.toDreamStatus() to it.dreamInfo.toDomainDream() }
+        .filterNot { (status, _) -> status is DreamStatus.None}
+        .partition { (status, _) -> status is DreamStatus.Finished }
+        .toList()
+        .map { list -> list.map { it.second } }
+
+    return ProfileDetails(
+        profile.name,
+        profile.level,
+        profile.exp,
+        profile.maxExp,
+        profile.imageUrl,
+        skills,
+        fulfilledDreams,
+        ongoingDreams
+    )
 }

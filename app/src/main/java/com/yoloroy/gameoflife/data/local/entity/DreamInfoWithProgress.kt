@@ -12,13 +12,17 @@ import androidx.room.Embedded
         JOIN dream_progress dp on dp.dream_id = d.dream_id
     """
 )
-data class DreamWithProgress(
+data class DreamInfoWithProgress(
     @Embedded
-    val dream: Dream,
+    val dreamInfo: DreamInfo,
 
     @ColumnInfo(name = "profile_id")
     val profileId: Int,
 
     @ColumnInfo(name = "progress")
     val progress: Int
-)
+) {
+    val dream get() = dreamInfo.dream
+
+    val dreamProgress get() = DreamProgress(profileId, dream.dreamId, progress)
+}

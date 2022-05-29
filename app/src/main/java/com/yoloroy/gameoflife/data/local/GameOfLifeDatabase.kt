@@ -19,7 +19,7 @@ import com.yoloroy.gameoflife.data.local.entity.*
         Tag::class
     ],
     views = [
-        DreamWithProgress::class
+        DreamInfoWithProgress::class
     ],
     version = 1
 )

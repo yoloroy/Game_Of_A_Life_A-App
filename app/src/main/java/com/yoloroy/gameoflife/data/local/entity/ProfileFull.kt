@@ -19,5 +19,5 @@ data class ProfileFull(
         parentColumn = "profile_id",
         entityColumn = "profile_id"
     )
-    val dreams: List<DreamWithProgress>
+    val dreamInfos: List<DreamInfoWithProgress>
 )

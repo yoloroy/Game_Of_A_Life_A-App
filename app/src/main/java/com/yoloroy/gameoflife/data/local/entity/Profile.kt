@@ -35,5 +35,7 @@ data class Profile(
         const val level = 1
         const val exp = 0
         const val maxExp = 25
+
+        val profile get() = Profile(localProfileId, null, "New Guru", level, exp, maxExp)
     }
 }
