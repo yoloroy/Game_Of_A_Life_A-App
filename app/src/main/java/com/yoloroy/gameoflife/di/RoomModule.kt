@@ -29,7 +29,6 @@ object RoomModule {
         @ApplicationContext app: Context
     ) = Room
         .databaseBuilder(app, GameOfLifeDatabase::class.java, "app_database")
-        .createFromAsset("starting_kit.db")
         .build()
 
     @Provides
