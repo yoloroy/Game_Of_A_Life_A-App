@@ -1,8 +1,12 @@
 package com.yoloroy.gameoflife.presentation.dreams
 
-import androidx.lifecycle.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.common.transform
+import com.yoloroy.gameoflife.common.transformMap
 import com.yoloroy.gameoflife.domain.model.data.ChallengeWithDreamInfo
 import com.yoloroy.gameoflife.domain.model.data.Dream
 import com.yoloroy.gameoflife.domain.use_case.CompleteChallenge
@@ -19,40 +23,31 @@ class DreamsViewModel @Inject constructor(
     private val getCurrentChallengesWithDreamInfo: GetCurrentChallengesWithDreamInfo
 ) : ViewModel() {
 
-    private var _dreams: MutableLiveData<Resource<List<Dream>>> =
-        MutableLiveData(Resource.Loading())
-    val dreams: LiveData<Resource<List<Dream>>> = _dreams
+    var dreamsState: Resource<List<Dream>> by mutableStateOf(Resource.Loading())
+        private set
 
-    private var _challenges: MutableLiveData<Resource<List<ChallengeWithDreamInfo>>> =
-        MutableLiveData(Resource.Loading())
-    val challenges: LiveData<Resource<List<ChallengeCardData>>> = _challenges.toCardData()
+    var challengesState: Resource<List<ChallengeCardData>> by mutableStateOf(Resource.Loading())
+        private set
 
     fun completeChallenge(challengeId: String) {
-        val dreamId = _challenges.value?.data?.find { it.id == challengeId }?.dreamId!!
-
-        completeChallenge.invoke(dreamId)
+        viewModelScope.launch {
+            completeChallenge.invoke(challengeId).collect {} // todo handling
+        }
     }
 
     init {
         viewModelScope.launch {
             getCurrentDreams().collect {
-                _dreams.value = it
+                dreamsState = it
             }
         }
         viewModelScope.launch {
-            getCurrentChallengesWithDreamInfo().collect {
-                _challenges.value = it
+            getCurrentChallengesWithDreamInfo().collect { res ->
+                challengesState = res.transformMap { it.toCardData() }
             }
         }
     }
 }
-
-private fun LiveData<Resource<List<ChallengeWithDreamInfo>>>.toCardData() = Transformations
-    .map(this) { resource ->
-        resource.transform { list ->
-            list.map { it.toCardData() }
-        }
-    }
 
 private fun ChallengeWithDreamInfo.toCardData() =
     ChallengeCardData(dreamName, id, no, name, description)

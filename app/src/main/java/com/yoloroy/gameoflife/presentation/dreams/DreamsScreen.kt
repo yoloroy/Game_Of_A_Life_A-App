@@ -8,7 +8,6 @@ import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material.icons.sharp.Checklist
 import androidx.compose.material.icons.sharp.TaskAlt
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,16 +27,13 @@ import com.yoloroy.gameoflife.presentation.util.Screen
 
 @Composable
 fun DreamsScreen(navController: NavController, viewModel: DreamsViewModel = hiltViewModel()) {
-    val dreams by viewModel.dreams.observeAsState()
-    val challenges by viewModel.challenges.observeAsState()
-
     WithMainNavigationBar(
         currentScreen = BottomNavigationScreen(Screen.DreamsScreen),
         navController = navController
     ) {
         DreamsScreen(
-            dreams = dreams?.data ?: emptyList(), /*TODO error*/
-            challenges = challenges?.data ?: emptyList(), /*TODO error*/
+            dreams = viewModel.dreamsState.data ?: emptyList(), /*TODO error*/
+            challenges = viewModel.challengesState.data ?: emptyList(), /*TODO error*/
             modifier = Modifier.weight(1f),
             onClickAddDream = {
                 navController.navigate(Screen.DreamsLibraryScreen.route)

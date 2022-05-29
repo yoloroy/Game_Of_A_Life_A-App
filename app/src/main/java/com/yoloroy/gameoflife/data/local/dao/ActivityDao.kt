@@ -53,7 +53,7 @@ interface ActivityDao {
         SET progress = progress + 1
         WHERE
             profile_id = ${Profile.Default.localProfileId} AND
-            dream_id in (
+            dream_id = (
                 SELECT dream_id
                 FROM challenge
                 WHERE challenge_id = :challengeId
