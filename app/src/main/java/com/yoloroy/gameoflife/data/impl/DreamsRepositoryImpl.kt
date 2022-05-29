@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class DreamsRepositoryImpl @Inject constructor(
-    private val dreamsRemoteSource: DreamsRemoteSource,
-    private val dreamsLocalDataSource: DreamsLocalDataSource
+    private val remoteSource: DreamsRemoteSource,
+    private val localDataSource: DreamsLocalDataSource
 ) : DreamsRepository {
 
     override fun getDreamsByTags(tags: List<String>): Flow<Resource<List<Dream>>> = flow {
         emit(Resource.Loading())
 
-        val resource = dreamsRemoteSource.getDreamsByTags(tags)
+        val resource = remoteSource.getDreamsByTags(tags)
             .transformMap { it.toModel() }
         emit(resource)
     }
@@ -28,16 +28,16 @@ class DreamsRepositoryImpl @Inject constructor(
     override fun getDreamDetail(dreamId: String): Flow<Resource<DreamDetail>> = flow {
         emit(Resource.Loading())
 
-        val local = dreamsLocalDataSource.getDreamDetail(dreamId)
+        val local = localDataSource.getDreamDetail(dreamId)
             .takeIf { it is Resource.Success }
             ?.also { emit(it) }
 
-        val remote = dreamsRemoteSource.getDreamDetail(dreamId)
+        val remote = remoteSource.getDreamDetail(dreamId)
             .transform { it.toModel() }
 
         when {
             remote is Resource.Success -> {
-                dreamsLocalDataSource.addDreamDetail(remote.data)
+                localDataSource.addDreamDetail(remote.data)
                 emit(remote)
             }
             remote is Resource.Error && local is Resource.Success -> {
