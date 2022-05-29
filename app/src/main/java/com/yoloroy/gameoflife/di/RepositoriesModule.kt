@@ -1,10 +1,12 @@
 package com.yoloroy.gameoflife.di
 
+import com.yoloroy.gameoflife.data.data_source.ActivityLocalDataSource
 import com.yoloroy.gameoflife.data.data_source.DreamsLocalDataSource
-import com.yoloroy.gameoflife.data.fake.ActivityRepositoryFakeImpl
+import com.yoloroy.gameoflife.data.data_source.ProfileLocalDataSource
 import com.yoloroy.gameoflife.data.fake.AuthRepositoryFakeImpl
-import com.yoloroy.gameoflife.data.fake.ProfileRepositoryFakeImpl
+import com.yoloroy.gameoflife.data.impl.ActivityRepositoryImpl
 import com.yoloroy.gameoflife.data.impl.DreamsRepositoryImpl
+import com.yoloroy.gameoflife.data.impl.ProfileRepositoryImpl
 import com.yoloroy.gameoflife.data.remote.DreamsRemoteSource
 import com.yoloroy.gameoflife.domain.repository.ActivityRepository
 import com.yoloroy.gameoflife.domain.repository.AuthRepository
@@ -20,10 +22,14 @@ import dagger.hilt.components.SingletonComponent
 object RepositoriesModule {
 
     @Provides
-    fun provideDreamDetailsRepository(): AuthRepository = AuthRepositoryFakeImpl
+    fun provideAuthRepository(): AuthRepository = AuthRepositoryFakeImpl
 
     @Provides
-    fun provideDreamsLibraryRepository(): ActivityRepository = ActivityRepositoryFakeImpl
+    fun provideActivityRepository(
+        activityLocalDataSource: ActivityLocalDataSource
+    ): ActivityRepository = ActivityRepositoryImpl(
+        activityLocalDataSource
+    )
 
     @Provides
     fun provideDreamsRepository(
@@ -35,5 +41,9 @@ object RepositoriesModule {
     )
 
     @Provides
-    fun provideProfileRepository(): ProfileRepository = ProfileRepositoryFakeImpl
+    fun provideProfileRepository(
+        profileLocalDataSource: ProfileLocalDataSource
+    ): ProfileRepository = ProfileRepositoryImpl(
+        profileLocalDataSource
+    )
 }

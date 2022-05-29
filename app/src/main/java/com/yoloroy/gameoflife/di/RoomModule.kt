@@ -11,6 +11,7 @@ import com.yoloroy.gameoflife.data.local.RoomDreamsLocalDataSourceImpl
 import com.yoloroy.gameoflife.data.local.RoomProfileLocalDataSourceImpl
 import com.yoloroy.gameoflife.data.local.dao.ActivityDao
 import com.yoloroy.gameoflife.data.local.dao.DreamsDao
+import com.yoloroy.gameoflife.data.local.dao.ProfileDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,7 +53,7 @@ object RoomModule {
     }
 
     @Provides
-    fun provideProfileLocalDataSource(): ProfileLocalDataSource {
-        return RoomProfileLocalDataSourceImpl()
+    fun provideProfileLocalDataSource(profileDao: ProfileDao): ProfileLocalDataSource {
+        return RoomProfileLocalDataSourceImpl(profileDao)
     }
 }
