@@ -29,10 +29,13 @@ interface ActivityDao {
 
     @Transaction
     @Query("""
-        SELECT *
+        SELECT c.*
         FROM challenge c
         INNER JOIN dream_progress dp ON dp.dream_id = c.dream_id
-        WHERE dp.profile_id = ${Profile.Default.localProfileId}
+        WHERE
+            dp.profile_id = ${Profile.Default.localProfileId} AND 
+            (dp.progress + 1) = c.`no`
+        GROUP BY c.dream_id, dp.profile_id
     """)
     fun getCurrentChallengesWithDreamInfo(): Flow<List<ChallengeFullWithDream>>
 
