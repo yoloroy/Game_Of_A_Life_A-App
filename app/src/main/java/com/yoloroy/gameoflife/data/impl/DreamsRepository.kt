@@ -28,18 +28,24 @@ class DreamsRepositoryImpl @Inject constructor(
     override fun getDreamDetail(dreamId: String): Flow<Resource<DreamDetail>> = flow {
         emit(Resource.Loading())
 
-        dreamsLocalDataSource.getDreamDetail(dreamId)
+        val local = dreamsLocalDataSource.getDreamDetail(dreamId)
             .takeIf { it is Resource.Success }
-            ?.let { emit(it) }
+            ?.also { emit(it) }
 
-        val resource = dreamsRemoteSource.getDreamDetail(dreamId)
+        val remote = dreamsRemoteSource.getDreamDetail(dreamId)
             .transform { it.toModel() }
 
-        resource.takeIf { it is Resource.Success }?.data
-            ?.let {
-                dreamsLocalDataSource.addDreamDetail(it)
+        when {
+            remote is Resource.Success -> {
+                dreamsLocalDataSource.addDreamDetail(remote.data)
+                emit(remote)
             }
-
-        emit(resource)
+            remote is Resource.Error && local is Resource.Success -> {
+                emit(Resource.Error(data = local.data, error = remote.error))
+            }
+            else -> {
+                emit(remote)
+            }
+        }
     }
 }
