@@ -1,5 +1,6 @@
 package com.yoloroy.gameoflife.di
 
+import com.yoloroy.gameoflife.data.data_source.DreamsLocalDataSource
 import com.yoloroy.gameoflife.data.fake.ActivityRepositoryFakeImpl
 import com.yoloroy.gameoflife.data.fake.AuthRepositoryFakeImpl
 import com.yoloroy.gameoflife.data.fake.ProfileRepositoryFakeImpl
@@ -25,7 +26,13 @@ object RepositoriesModule {
     fun provideDreamsLibraryRepository(): ActivityRepository = ActivityRepositoryFakeImpl
 
     @Provides
-    fun provideDreamsRepository(dreamsRemoteSource: DreamsRemoteSource): DreamsRepository = DreamsRepositoryImpl(dreamsRemoteSource)
+    fun provideDreamsRepository(
+        dreamsRemoteSource: DreamsRemoteSource,
+        dreamsLocalDataSource: DreamsLocalDataSource
+    ): DreamsRepository = DreamsRepositoryImpl(
+        dreamsRemoteSource,
+        dreamsLocalDataSource
+    )
 
     @Provides
     fun provideProfileRepository(): ProfileRepository = ProfileRepositoryFakeImpl
