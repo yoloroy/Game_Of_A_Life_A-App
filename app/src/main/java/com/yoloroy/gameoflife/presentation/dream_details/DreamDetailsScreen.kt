@@ -1,6 +1,7 @@
 package com.yoloroy.gameoflife.presentation.dream_details
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,6 +54,18 @@ fun DreamDetailsScreen(
     onClickDelete: () -> Unit = {},
     onClickTag: (String) -> Unit = {}
 ) {
+    val context = LocalContext.current
+
+    LaunchedEffect(dream is Resource.Error) {
+        if (dream !is Resource.Error) return@LaunchedEffect
+
+        Toast.makeText(
+            context,
+            dream.error.toString(), // TODO message with localization
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -65,12 +79,15 @@ fun DreamDetailsScreen(
         ) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                topBar = { ActionBar(dream.data?.name ?: "", mode, onClickBack, onClickAdd, onClickDelete) },
+                topBar = {
+                    ActionBar(dream.data?.name ?: "", mode, onClickBack, onClickAdd, onClickDelete)
+                },
                 content = {
-                    when (dream) {
-                        is Resource.Success -> DreamContent(dream.data!!, onClickTag)
-                        is Resource.Loading -> LoadingContent()
-                        is Resource.Error -> ErrorContent()
+                    if (dream is Resource.Loading) {
+                        LoadingCircle()
+                    }
+                    dream.data?.let { data ->
+                        DreamContent(data, onClickTag)
                     }
                 }
             )
@@ -117,13 +134,15 @@ private fun DreamContent(dream: DreamDetail, onClickTag: (String) -> Unit) {
 }
 
 @Composable
-private fun LoadingContent() {
-    CircularProgressIndicator()
-}
-
-@Composable
-private fun ErrorContent() {
-    // TODO
+private fun LoadingCircle() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        CircularProgressIndicator()
+    }
 }
 
 @Composable
@@ -148,7 +167,8 @@ private fun ActionBar(
                 text = dreamName,
                 color = MaterialTheme.colors.secondary,
                 style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.wrapContentHeight()
             )
         },
         actions = actions@{
