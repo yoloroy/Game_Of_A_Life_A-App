@@ -27,11 +27,10 @@ object RoomModule {
     @Provides
     fun provideGameOfLifeDatabase(
         @ApplicationContext app: Context
-    ) = Room.databaseBuilder(
-        app,
-        GameOfLifeDatabase::class.java,
-        "app_database"
-    ).build()
+    ) = Room
+        .databaseBuilder(app, GameOfLifeDatabase::class.java, "app_database")
+        .createFromAsset("starting_kit.db")
+        .build()
 
     @Provides
     fun provideActivityDao(db: GameOfLifeDatabase) = db.activityDao()
