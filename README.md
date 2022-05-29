@@ -16,6 +16,7 @@
 * Add tests
 * Complete settings
 * Add tutorial
+* Divide code by features
 
 ## *
 * Dreams - Roadmaps
