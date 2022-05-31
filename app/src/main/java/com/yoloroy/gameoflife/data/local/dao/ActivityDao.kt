@@ -13,8 +13,8 @@ interface ActivityDao {
     @Query("""
         SELECT *
         FROM dream d
-        INNER JOIN dream_progress dp ON dp.dream_id = d.dream_id
-        WHERE dp.profile_id = ${Profile.Default.localProfileId}
+        INNER JOIN dream_status ds ON ds.dream_id = d.dream_id AND NOT ds.is_finished
+        WHERE ds.profile_id = ${Profile.Default.localProfileId}
     """)
     fun getCurrentDreamInfos(): Flow<List<DreamInfo>>
 
@@ -22,8 +22,8 @@ interface ActivityDao {
     @Query("""
         SELECT *
         FROM dream d
-        INNER JOIN dream_progress dp ON dp.dream_id = d.dream_id
-        WHERE dp.profile_id = ${Profile.Default.localProfileId}
+        INNER JOIN dream_status ds ON ds.dream_id = d.dream_id AND NOT ds.is_finished
+        WHERE ds.profile_id = ${Profile.Default.localProfileId}
     """)
     fun getCurrentDreamsDetails(): Flow<List<DreamFull>>
 
