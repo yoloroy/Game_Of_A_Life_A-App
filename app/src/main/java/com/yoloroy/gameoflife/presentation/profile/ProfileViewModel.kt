@@ -6,21 +6,21 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yoloroy.gameoflife.common.Resource
-import com.yoloroy.gameoflife.domain.model.data.Profile
-import com.yoloroy.gameoflife.domain.use_case.GetProfile
+import com.yoloroy.gameoflife.domain.model.data.ProfileDetails
+import com.yoloroy.gameoflife.domain.use_case.GetProfileDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(val getProfile: GetProfile) : ViewModel() {
+class ProfileViewModel @Inject constructor(val getProfileDetails: GetProfileDetails) : ViewModel() {
 
-    var profile: Resource<Profile> by mutableStateOf(Resource.Loading())
+    var profile: Resource<ProfileDetails> by mutableStateOf(Resource.Loading())
         private set
 
     init {
         viewModelScope.launch {
-            getProfile().collect {
+            getProfileDetails().collect {
                 profile = it
             }
         }

@@ -22,7 +22,7 @@ import com.skydoves.landscapist.glide.GlideImage
 import com.yoloroy.gameoflife.R
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.data.Dream
-import com.yoloroy.gameoflife.domain.model.data.Profile
+import com.yoloroy.gameoflife.domain.model.data.ProfileDetails
 import com.yoloroy.gameoflife.domain.model.data.Skill
 import com.yoloroy.gameoflife.presentation.components.BottomNavigationScreen
 import com.yoloroy.gameoflife.presentation.components.WithMainNavigationBar
@@ -52,7 +52,7 @@ fun ProfileScreen(navController: NavController, viewModel: ProfileViewModel = hi
 
 @Composable
 fun ProfileScreen(
-    profile: Profile,
+    profile: ProfileDetails,
     modifier: Modifier = Modifier,
     onClickSettings: () -> Unit = {},
     onClickDream: (Dream) -> Unit = {}
@@ -204,7 +204,7 @@ fun ProfileScreenPreview() {
             color = MaterialTheme.colors.background
         ) {
             ProfileScreen(
-                profile = Profile(
+                profile = ProfileDetails(
                     name = "AndroidDancer",
                     level = 3,
                     exp = 83,
