@@ -41,12 +41,12 @@ interface ActivityDao {
 
     @Query("""
         SELECT *
-        FROM dream_progress
+        FROM dream_status
         WHERE
             profile_id = ${Profile.Default.localProfileId} AND
             dream_id = :dreamId
     """)
-    fun getDreamProgressOrNull(dreamId: Int): Flow<DreamProgress?>
+    fun getDreamStatusOrNull(dreamId: Int): Flow<DreamStatus?>
 
     @Query("""
         UPDATE dream_progress

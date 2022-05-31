@@ -6,13 +6,13 @@ import com.yoloroy.gameoflife.data.local.dao.ActivityDao
 import com.yoloroy.gameoflife.data.local.entity.ChallengeFullWithDream
 import com.yoloroy.gameoflife.data.local.entity.DreamFull
 import com.yoloroy.gameoflife.data.local.entity.DreamInfo
-import com.yoloroy.gameoflife.data.local.entity.DreamProgress
 import com.yoloroy.gameoflife.domain.model.data.ChallengeWithDreamInfo
 import com.yoloroy.gameoflife.domain.model.data.DreamDetail
 import com.yoloroy.gameoflife.domain.model.data.DreamStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import com.yoloroy.gameoflife.data.local.entity.DreamStatus as DreamStatusEntity
 import com.yoloroy.gameoflife.domain.model.data.Dream as DreamModel
 
 class RoomActivityLocalDataSourceImpl @Inject constructor(
@@ -38,8 +38,8 @@ class RoomActivityLocalDataSourceImpl @Inject constructor(
         }
 
     override fun getDreamStatus(dreamId: Int): Flow<Resource<DreamStatus>> {
-        return activityDao.getDreamProgressOrNull(dreamId)
-            .mapToResource(DreamProgress?::toDreamStatus)
+        return activityDao.getDreamStatusOrNull(dreamId)
+            .mapToResource(DreamStatusEntity?::toDomainDreamStatus)
     }
 
     override fun completeChallenge(challengeId: Int): Flow<Resource<Boolean>> = flow {

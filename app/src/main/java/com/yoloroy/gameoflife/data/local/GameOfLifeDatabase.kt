@@ -1,5 +1,6 @@
 package com.yoloroy.gameoflife.data.local
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.yoloroy.gameoflife.data.local.dao.ActivityDao
@@ -19,9 +20,13 @@ import com.yoloroy.gameoflife.data.local.entity.*
         Tag::class
     ],
     views = [
-        DreamInfoWithProgress::class
+        DreamInfoWithProgress::class,
+        DreamStatus::class
     ],
-    version = 1
+    version = 2,
+    autoMigrations = [
+        AutoMigration (from = 1, to = 2)
+    ]
 )
 abstract class GameOfLifeDatabase : RoomDatabase() {
 

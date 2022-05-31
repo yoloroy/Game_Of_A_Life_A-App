@@ -45,4 +45,6 @@ interface ProfileDao {
         WHERE profile_id = ${Profile.Default.localProfileId}
     """)
     fun updateName(name: String)
+
+
 }

@@ -3,14 +3,15 @@ package com.yoloroy.gameoflife.data.local
 import com.yoloroy.gameoflife.data.local.entity.*
 import com.yoloroy.gameoflife.domain.model.data.ChallengeWithDreamInfo
 import com.yoloroy.gameoflife.domain.model.data.DreamDetail
-import com.yoloroy.gameoflife.domain.model.data.DreamStatus
 import com.yoloroy.gameoflife.domain.model.data.ProfileDetails
 import com.yoloroy.gameoflife.data.local.entity.Challenge as ChallengeEntity
 import com.yoloroy.gameoflife.data.local.entity.Dream as DreamEntity
+import com.yoloroy.gameoflife.data.local.entity.DreamStatus as DreamStatusEntity
 import com.yoloroy.gameoflife.data.local.entity.Profile as ProfileEntity
 import com.yoloroy.gameoflife.data.local.entity.Skill as SkillEntity
 import com.yoloroy.gameoflife.domain.model.data.Challenge as DomainChallenge
 import com.yoloroy.gameoflife.domain.model.data.Dream as DomainDream
+import com.yoloroy.gameoflife.domain.model.data.DreamStatus as DomainDreamStatus
 import com.yoloroy.gameoflife.domain.model.data.Profile as DomainProfile
 import com.yoloroy.gameoflife.domain.model.data.Skill as DomainSkill
 
@@ -57,13 +58,13 @@ fun ChallengeFullWithDream.toChallengeWithDreamInfo(): ChallengeWithDreamInfo {
 
 fun SkillEntity.toDomainSkill() = DomainSkill(name, level)
 
-fun DreamProgress?.toDreamStatus(challengesCount: Int? = null): DreamStatus {
-    return when (this) {
-        null -> DreamStatus.None
-        else -> when (progress) {
-            0 -> DreamStatus.Subscribed
-            challengesCount -> DreamStatus.Finished
-            else -> DreamStatus.InProcess(progress)
+fun DreamStatusEntity?.toDomainDreamStatus(): DomainDreamStatus {
+    return when {
+        this == null -> DomainDreamStatus.None
+        isFinished -> DomainDreamStatus.Finished
+        else -> when (dreamProgress.progress) {
+            0 -> DomainDreamStatus.Subscribed
+            else -> DomainDreamStatus.InProcess(dreamProgress.progress)
         }
     }
 }
@@ -79,9 +80,9 @@ fun ProfileFull.toProfileDetails(): ProfileDetails {
     val profile = profile.toDomainProfile()
     val skills = skills.map(SkillEntity::toDomainSkill)
     val (fulfilledDreams, ongoingDreams) = dreamInfos
-        .map { it.dreamProgress.toDreamStatus() to it.dreamInfo.toDomainDream() }
-        .filterNot { (status, _) -> status is DreamStatus.None}
-        .partition { (status, _) -> status is DreamStatus.Finished }
+        .map { it.dreamStatus.toDomainDreamStatus() to it.dreamInfo.toDomainDream() }
+        .filterNot { (status, _) -> status is DomainDreamStatus.None}
+        .partition { (status, _) -> status is DomainDreamStatus.Finished }
         .toList()
         .map { list -> list.map { it.second } }
 
