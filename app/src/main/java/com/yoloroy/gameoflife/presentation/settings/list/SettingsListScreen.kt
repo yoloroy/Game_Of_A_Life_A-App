@@ -32,18 +32,12 @@ fun SettingsListScreen(navController: NavController, viewModel: SettingsListView
     SettingsListScreen(
         profile = viewModel.profile,
         onClickBack = navController::popBackStack,
-        onClickProfileSettings = { navController.navigate(Screen.ProfileSettingsScreen.route) },
-        onClickResetStats = {
-            viewModel.resetStats {
-                navController.navigate(Screen.ProfileScreen.route)
-            }
-        },
-        onClickSignOut = {
-            viewModel.signOut {
-                navController.navigate(Screen.LoginScreen.route)
-            }
+        onClickProfileSettings = { navController.navigate(Screen.ProfileSettingsScreen.route) }
+    ) {
+        viewModel.resetStats {
+            navController.navigate(Screen.ProfileScreen.route)
         }
-    )
+    }
 }
 
 @ExperimentalMaterialApi
@@ -52,11 +46,9 @@ fun SettingsListScreen(
     profile: Resource<Profile>,
     onClickBack: () -> Unit = {},
     onClickProfileSettings: () -> Unit = {},
-    onClickResetStats: () -> Unit = {},
-    onClickSignOut: () -> Unit = {}
+    onClickResetStats: () -> Unit = {}
 ) {
     var resetStatsDialogShown by remember { mutableStateOf(false) }
-    var signOutDialogShown by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -68,8 +60,7 @@ fun SettingsListScreen(
         content = {
             Content(
                 onClickProfileSettings = onClickProfileSettings,
-                onClickResetStats = { resetStatsDialogShown = true },
-                onClickSignOut = { signOutDialogShown = true }
+                onClickResetStats = { resetStatsDialogShown = true }
             )
         }
     )
@@ -78,11 +69,6 @@ fun SettingsListScreen(
         show = resetStatsDialogShown,
         onResetStats = onClickResetStats,
         hide = { resetStatsDialogShown = false }
-    )
-    SignOutDialog(
-        show = signOutDialogShown,
-        onSignOut = onClickSignOut,
-        hide = { signOutDialogShown = false }
     )
 }
 
@@ -125,8 +111,8 @@ private fun ActionBar(profile: Resource<Profile>, onClickBack: () -> Unit) {
 @Composable
 private fun ProfileInfo(profile: Resource<Profile>, modifier: Modifier = Modifier) {
     when (profile) {
-        is Resource.Success -> ProfileInfoContent(profile.data!!, modifier)
-        is Resource.Error -> ProfileInfoError(profile.error!!, modifier)
+        is Resource.Success -> ProfileInfoContent(profile.data, modifier)
+        is Resource.Error -> ProfileInfoError(profile.error, modifier)
         is Resource.Loading -> ProfileInfoLoading(modifier)
     }
 }
@@ -197,8 +183,7 @@ private fun ProfileInfoError(error: Throwable, modifier: Modifier = Modifier) {
 @Composable
 private fun Content(
     onClickProfileSettings: () -> Unit,
-    onClickResetStats: () -> Unit,
-    onClickSignOut: () -> Unit
+    onClickResetStats: () -> Unit
 ) {
     Column {
         Spacer(modifier = Modifier.height(12.dp))
@@ -248,14 +233,6 @@ private fun Content(
                 .clickable(onClick = onClickResetStats),
             text = {
                 Text(text = "Reset stats", color = MaterialTheme.colors.warning)
-            }
-        )
-        ListItem(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .clickable(onClick = onClickSignOut),
-            text = {
-                Text(text = "Sign out", color = MaterialTheme.colors.error)
             }
         )
     }
