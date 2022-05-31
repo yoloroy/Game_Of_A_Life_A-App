@@ -1,5 +1,6 @@
 package com.yoloroy.gameoflife.presentation.profile
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -136,7 +137,7 @@ private fun SkillsList(skills: List<Skill>) {
 
 @Composable
 private fun FulfilledDreams(dreams: List<Dream>, onClickDream: (Dream) -> Unit) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(true) }
 
     Surface(
         color = MaterialTheme.colors.surface,
@@ -166,15 +167,17 @@ private fun FulfilledDreams(dreams: List<Dream>, onClickDream: (Dream) -> Unit) 
                     )
                 }
             }
-            LazyColumn(
-                modifier = Modifier.padding(12.dp)
-            ) {
-                items(dreams) { dream ->
-                    DreamItem(
-                        id = dream.id,
-                        name = dream.name,
-                        onClick = { onClickDream(dream) }
-                    )
+            AnimatedVisibility(visible = isExpanded) {
+                LazyColumn(
+                    modifier = Modifier.padding(12.dp)
+                ) {
+                    items(dreams) { dream ->
+                        DreamItem(
+                            id = dream.id,
+                            name = dream.name,
+                            onClick = { onClickDream(dream) }
+                        )
+                    }
                 }
             }
         }
