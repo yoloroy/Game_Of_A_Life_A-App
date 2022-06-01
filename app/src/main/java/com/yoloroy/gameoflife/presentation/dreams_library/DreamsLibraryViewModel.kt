@@ -28,20 +28,24 @@ class DreamsLibraryViewModel @Inject constructor(
     @Suppress("SuspiciousCollectionReassignment")
     fun addTag(tag: String) {
         tagsState += tag
-        updateTags()
+        onUpdateTags()
     }
 
     @Suppress("SuspiciousCollectionReassignment")
     fun removeTag(tag: String) {
         tagsState -= tag
-        updateTags()
+        onUpdateTags()
     }
 
-    private fun updateTags() {
+    private fun onUpdateTags() {
         viewModelScope.launch {
             getDreamsByTags(tagsState.toList())
                 .collect { dreamsState = it }
         }
+    }
+
+    init {
+        onUpdateTags()
     }
 
     private fun handleSavedTags(savedStateHandle: SavedStateHandle) =

@@ -98,16 +98,19 @@ private fun DreamsLayer(
         is Resource.Loading -> "Loading results.."
         is Resource.Error -> ":(" /*TODO*/
     }
-    Text(
-        text = topText,
-        modifier = Modifier.padding(20.dp),
-        style = MaterialTheme.typography.subtitle2
-    )
 
     LazyColumn(
         contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        item {
+            Text(
+                text = topText,
+                modifier = Modifier.padding(10.dp),
+                style = MaterialTheme.typography.subtitle2
+            )
+        }
+
         when (dreams) {
             is Resource.Success -> dreamsSuccessResult(dreams.data, onClickTag, onClickDream)
             is Resource.Loading -> dreamsLoadingResult()
