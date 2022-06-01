@@ -1,6 +1,11 @@
 package com.yoloroy.gameoflife.presentation.dreams_library
 
-import androidx.lifecycle.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.data.Dream
 import com.yoloroy.gameoflife.domain.use_case.GetDreamsByTags
@@ -14,38 +19,34 @@ class DreamsLibraryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _tags: MutableLiveData<Set<String>> = MutableLiveData(
+    var tagsState by mutableStateOf(handleSavedTags(savedStateHandle))
+        private set
+
+    var dreamsState by mutableStateOf<Resource<List<Dream>>>(Resource.Loading())
+        private set
+
+    @Suppress("SuspiciousCollectionReassignment")
+    fun addTag(tag: String) {
+        tagsState += tag
+        updateTags()
+    }
+
+    @Suppress("SuspiciousCollectionReassignment")
+    fun removeTag(tag: String) {
+        tagsState -= tag
+        updateTags()
+    }
+
+    private fun updateTags() {
+        viewModelScope.launch {
+            getDreamsByTags(tagsState.toList())
+                .collect { dreamsState = it }
+        }
+    }
+
+    private fun handleSavedTags(savedStateHandle: SavedStateHandle) =
         (savedStateHandle.get<String>("tags") ?: "")
             .split(",")
             .filter(String::isNotEmpty)
             .toSet()
-    )
-    val tags: LiveData<Set<String>> = _tags
-
-    private val _dreams: MutableLiveData<Resource<List<Dream>>> = MutableLiveData(Resource.Loading())
-    val dreams: LiveData<Resource<List<Dream>>> = _dreams
-
-    fun addTag(tag: String) {
-        _tags.value = _tags.value!! + tag
-    }
-
-    fun removeTag(tag: String) {
-        _tags.value = _tags.value!! - tag
-    }
-
-    private val tagsObserver = Observer<Set<String>> { tags ->
-        viewModelScope.launch {
-            getDreamsByTags(tags!!.toList())
-                .collect { _dreams.value = it }
-        }
-    }
-
-    init {
-        _tags.observeForever(tagsObserver)
-    }
-
-    override fun onCleared() {
-        _tags.removeObserver(tagsObserver)
-        super.onCleared()
-    }
 }

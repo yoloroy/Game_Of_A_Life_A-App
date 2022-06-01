@@ -13,7 +13,6 @@ import androidx.compose.material.icons.sharp.ArrowBack
 import androidx.compose.material.icons.sharp.Close
 import androidx.compose.material.icons.sharp.Tune
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -35,13 +34,10 @@ import com.yoloroy.gameoflife.presentation.util.Screen
 @Composable
 fun DreamsLibraryScreen(navController: NavController, viewModel: DreamsLibraryViewModel = hiltViewModel()) {
     with(viewModel) {
-        val tags by tags.observeAsState()
-        val dreams by dreams.observeAsState()
-
         BackHandler(true, navController::popBackStack)
         DreamsLibraryScreen(
-            tags = tags!!.toList(),
-            dreams = dreams!!,
+            tags = tagsState.toList(),
+            dreams = dreamsState,
             onAddTag = ::addTag,
             onRemoveTag = ::removeTag,
             onClickBack = navController::popBackStack,
@@ -98,7 +94,7 @@ private fun DreamsLayer(
     onClickDream: (id: String) -> Unit
 ) {
     val topText = when (dreams) {
-        is Resource.Success -> "See ${dreams.data!!.size} results"
+        is Resource.Success -> "See ${dreams.data.size} results"
         is Resource.Loading -> "Loading results.."
         is Resource.Error -> ":(" /*TODO*/
     }
@@ -113,7 +109,7 @@ private fun DreamsLayer(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         when (dreams) {
-            is Resource.Success -> dreamsSuccessResult(dreams.data!!, onClickTag, onClickDream)
+            is Resource.Success -> dreamsSuccessResult(dreams.data, onClickTag, onClickDream)
             is Resource.Loading -> dreamsLoadingResult()
             is Resource.Error -> dreamsErrorResult()
         }
