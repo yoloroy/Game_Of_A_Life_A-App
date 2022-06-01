@@ -37,7 +37,7 @@ fun GameOfLifeTheme(content: @Composable () -> Unit) {
         shapes = Shapes
     ) {
         rememberSystemUiController().apply {
-            setSystemBarsColor(color = MaterialTheme.colors.background)
+            setStatusBarColor(color = MaterialTheme.colors.background)
         }
 
         content()

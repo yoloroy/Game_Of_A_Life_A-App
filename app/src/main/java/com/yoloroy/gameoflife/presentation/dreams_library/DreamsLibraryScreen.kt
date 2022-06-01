@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.data.Dream
 import com.yoloroy.gameoflife.presentation.components.GoalCard
@@ -67,10 +66,6 @@ fun DreamsLibraryScreen(
         } else {
             backdropState.conceal()
         }
-    }
-
-    rememberSystemUiController().apply {
-        setNavigationBarColor(MaterialTheme.colors.surface)
     }
 
     BackdropScaffold(
