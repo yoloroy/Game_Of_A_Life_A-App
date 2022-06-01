@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.firefinchdev.linkifytext.LinkifyText
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
+import com.yoloroy.gameoflife.presentation.ui.theme.link
 
 @Composable
 fun GoalCard(
@@ -55,9 +57,10 @@ fun GoalCard(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Text(
+            LinkifyText(
                 text = content,
-                color = MaterialTheme.colors.onBackground
+                color = MaterialTheme.colors.onBackground,
+                linkColor = MaterialTheme.colors.link
             )
         }
         LazyRow(

@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Game Of Life"
 include ':app'
+include ':LinkifyText'
