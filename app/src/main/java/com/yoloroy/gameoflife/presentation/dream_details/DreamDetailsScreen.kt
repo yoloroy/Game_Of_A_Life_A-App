@@ -39,7 +39,7 @@ fun DreamDetailsScreen(navController: NavController, viewModel: DreamDetailsView
             onClickAdd = ::addDream,
             onClickDelete = ::removeDream,
             onClickTag = { tag ->
-                val tagsArg = Uri.encode(arrayOf(tag).toString())
+                val tagsArg = Uri.encode(tag)
                 navController.navigate(Screen.DreamsLibraryScreen.route + "?tags=$tagsArg") }
         )
     }
