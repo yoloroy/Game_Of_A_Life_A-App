@@ -3,9 +3,6 @@ package com.yoloroy.gameoflife.presentation.dreams_library
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -13,7 +10,6 @@ import androidx.compose.material.icons.sharp.ArrowBack
 import androidx.compose.material.icons.sharp.Close
 import androidx.compose.material.icons.sharp.Tune
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,9 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowRow
-import com.yoloroy.gameoflife.common.Resource
 import com.yoloroy.gameoflife.domain.model.data.Dream
-import com.yoloroy.gameoflife.presentation.components.GoalCard
 import com.yoloroy.gameoflife.presentation.components.GoalTag
 import com.yoloroy.gameoflife.presentation.ui.icons.ToggleIcon
 import com.yoloroy.gameoflife.presentation.ui.theme.GameOfLifeTheme
@@ -33,10 +27,14 @@ import com.yoloroy.gameoflife.presentation.util.Screen
 @Composable
 fun DreamsLibraryScreen(navController: NavController, viewModel: DreamsLibraryViewModel = hiltViewModel()) {
     with(viewModel) {
+        val libraryDreamsUi by remember(dreamsState) {
+            derivedStateOf { LibraryDreamsUi.fromResource(dreamsState) }
+        }
+
         BackHandler(true, navController::popBackStack)
         DreamsLibraryScreen(
             tags = tagsState.toList(),
-            dreams = dreamsState,
+            libraryDreamsUi = libraryDreamsUi,
             onAddTag = ::addTag,
             onRemoveTag = ::removeTag,
             onClickBack = navController::popBackStack,
@@ -50,7 +48,7 @@ fun DreamsLibraryScreen(navController: NavController, viewModel: DreamsLibraryVi
 @Composable
 fun DreamsLibraryScreen(
     tags: List<String>,
-    dreams: Resource<List<Dream>>,
+    libraryDreamsUi: LibraryDreamsUi,
     onAddTag: (String) -> Unit = {},
     onRemoveTag: (String) -> Unit = {},
     onClickBack: () -> Unit = {},
@@ -76,76 +74,10 @@ fun DreamsLibraryScreen(
             isRevealed = backdropState.isConcealed
         ) },
         backLayerContent = { SearchTuningLayer(tags, onAddTag, onRemoveTag) },
-        frontLayerContent = { DreamsLayer(dreams, onClickTagInDream, onClickDream) },
+        frontLayerContent = { libraryDreamsUi.Content(onClickTagInDream, onClickDream) },
         backLayerBackgroundColor = MaterialTheme.colors.background,
         frontLayerShape = CutCornerShape(topStart = 12.dp)
     )
-}
-
-@Composable
-private fun DreamsLayer(
-    dreams: Resource<List<Dream>>,
-    onClickTag: (String) -> Unit,
-    onClickDream: (id: String) -> Unit
-) {
-    val topText = when (dreams) {
-        is Resource.Success -> "See ${dreams.data.size} results"
-        is Resource.Loading -> "Loading results.."
-        is Resource.Error -> ":(" /*TODO*/
-    }
-
-    LazyColumn(
-        contentPadding = PaddingValues(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        item {
-            Text(
-                text = topText,
-                modifier = Modifier.padding(10.dp),
-                style = MaterialTheme.typography.subtitle2
-            )
-        }
-
-        when (dreams) {
-            is Resource.Success -> dreamsSuccessResult(dreams.data, onClickTag, onClickDream)
-            is Resource.Loading -> dreamsLoadingResult()
-            is Resource.Error -> dreamsErrorResult()
-        }
-    }
-}
-
-private fun LazyListScope.dreamsSuccessResult(
-    dreams: List<Dream>,
-    onClickTag: (String) -> Unit,
-    onClickDream: (id: String) -> Unit
-) {
-    items(dreams) { dream ->
-        GoalCard(
-            title = dream.name,
-            content = dream.description,
-            tags = dream.tags,
-            modifier = Modifier.fillMaxWidth(),
-            onClickTag = onClickTag,
-            onClick = { onClickDream(dream.id) }
-        )
-    }
-}
-
-private fun LazyListScope.dreamsLoadingResult() {
-    item {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-    }
-}
-
-private fun LazyListScope.dreamsErrorResult() {
-    item {}
 }
 
 @Composable
@@ -246,6 +178,6 @@ fun DreamsLibraryScreenPreview() {
     val tags = listOf("Android", "IT", "Easy start")
 
     GameOfLifeTheme {
-        DreamsLibraryScreen(tags, Resource.Success(dreams))
+        DreamsLibraryScreen(tags, LibraryDreamsUi.DreamsContent(dreams))
     }
 }
