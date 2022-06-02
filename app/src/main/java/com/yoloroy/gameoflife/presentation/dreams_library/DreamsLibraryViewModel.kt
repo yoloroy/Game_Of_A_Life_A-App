@@ -19,28 +19,28 @@ class DreamsLibraryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var tagsState by mutableStateOf(handleSavedTags(savedStateHandle))
+    var tags by mutableStateOf(handleSavedTags(savedStateHandle))
         private set
 
-    var dreamsState by mutableStateOf<Resource<List<Dream>>>(Resource.Loading())
+    var dreams by mutableStateOf<Resource<List<Dream>>>(Resource.Loading())
         private set
 
     @Suppress("SuspiciousCollectionReassignment")
     fun addTag(tag: String) {
-        tagsState += tag
+        tags += tag
         onUpdateTags()
     }
 
     @Suppress("SuspiciousCollectionReassignment")
     fun removeTag(tag: String) {
-        tagsState -= tag
+        tags -= tag
         onUpdateTags()
     }
 
     private fun onUpdateTags() {
         viewModelScope.launch {
-            getDreamsByTags(tagsState.toList())
-                .collect { dreamsState = it }
+            getDreamsByTags(tags.toList())
+                .collect { dreams = it }
         }
     }
 

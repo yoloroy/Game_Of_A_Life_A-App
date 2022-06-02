@@ -27,13 +27,13 @@ import com.yoloroy.gameoflife.presentation.util.Screen
 @Composable
 fun DreamsLibraryScreen(navController: NavController, viewModel: DreamsLibraryViewModel = hiltViewModel()) {
     with(viewModel) {
-        val libraryDreamsUi by remember(dreamsState) {
-            derivedStateOf { LibraryDreamsUi.fromResource(dreamsState) }
+        val libraryDreamsUi by remember(dreams) {
+            derivedStateOf { LibraryDreamsUi.fromResource(dreams) }
         }
 
         BackHandler(true, navController::popBackStack)
         DreamsLibraryScreen(
-            tags = tagsState.toList(),
+            tags = tags.toList(),
             libraryDreamsUi = libraryDreamsUi,
             onAddTag = ::addTag,
             onRemoveTag = ::removeTag,
