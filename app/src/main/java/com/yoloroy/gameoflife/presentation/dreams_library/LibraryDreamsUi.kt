@@ -23,12 +23,9 @@ sealed class LibraryDreamsUi {
     companion object {
         fun fromResource(dreamsResource: Resource<List<Dream>>) = when (dreamsResource) {
             is Resource.Success -> DreamsContent(dreamsResource.data)
-            is Resource.Loading -> when {
-                dreamsResource.data != null ->
-                    LoadingWithSavedDreamsContent(dreamsResource.data!!)
-                else ->
-                    LoadingContent
-            }
+            is Resource.Loading -> dreamsResource.data
+                ?.let { LoadingWithSavedDreamsContent(dreamsResource.data!!) }
+                ?: LoadingContent
             is Resource.Error -> ErrorContent
         }
     }
@@ -63,7 +60,9 @@ sealed class LibraryDreamsUi {
         }
     }
 
-    class LoadingWithSavedDreamsContent(dreams: List<Dream>) : DreamsContent(dreams) {
+    class LoadingWithSavedDreamsContent(dreams: List<Dream>) : LibraryDreamsUi() {
+
+        private val dreamsContent = DreamsContent(dreams)
 
         @Composable
         override fun Content(onClickTag: (String) -> Unit, onClickDream: (String) -> Unit) {
@@ -79,7 +78,7 @@ sealed class LibraryDreamsUi {
                 ) {
                     CircularProgressIndicator()
                 }
-                super.Content(onClickTag, onClickDream)
+                dreamsContent.Content(onClickTag, onClickDream)
             }
         }
     }
