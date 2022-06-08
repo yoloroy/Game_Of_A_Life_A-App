@@ -7,9 +7,7 @@ import com.yoloroy.gameoflife.data.local.entity.ProfileFull
 import com.yoloroy.gameoflife.domain.model.data.Profile
 import com.yoloroy.gameoflife.domain.model.data.ProfileDetails
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEmpty
 import javax.inject.Inject
 import com.yoloroy.gameoflife.data.local.entity.Profile as ProfileEntity
 
@@ -18,17 +16,9 @@ class RoomProfileLocalDataSourceImpl @Inject constructor(
 ) : ProfileLocalDataSource {
 
     override val profile: Flow<Resource<Profile>> get() = profileDao.getProfile()
-        .onEmpty { // TODO
-            profileDao.insertProfile()
-        }
-        .filterNotNull()
         .mapToResource(ProfileEntity::toDomainProfile)
 
     override val profileDetails: Flow<Resource<ProfileDetails>> get() = profileDao.getProfileFull()
-        .onEmpty { // TODO
-            profileDao.insertProfile()
-        }
-        .filterNotNull()
         .mapToResource(ProfileFull::toProfileDetails)
 
     override fun resetStats(): Flow<Resource<Boolean>> = flow {

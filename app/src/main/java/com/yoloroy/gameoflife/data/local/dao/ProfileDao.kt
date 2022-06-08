@@ -16,11 +16,11 @@ interface ProfileDao {
     suspend fun insertProfile(profile: Profile = Profile.Default.profile)
 
     @Query("SELECT * FROM profile LIMIT 1")
-    fun getProfile(): Flow<Profile?>
+    fun getProfile(): Flow<Profile>
 
     @Transaction
     @Query("SELECT * FROM profile LIMIT 1")
-    fun getProfileFull(): Flow<ProfileFull?>
+    fun getProfileFull(): Flow<ProfileFull>
 
     @Query("""
         UPDATE profile
